@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="H2D">
+</Property><Property Name="Solution File" Value="C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.sln">
+</Property><Property Name="User Options File" Value="C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.suo">
+</Property><Property Name="Date" Value="vendredi 30 décembre 2011">
+</Property><Property Name="Time" Value="16:02">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="H2D.sln" Description="File successfully backed up as C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="H2D.suo" Description="File successfully backed up as C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.suo.old">
+</Event><Event ErrorLevel="0" Project="H2D" Source="H2D.vcproj" Description="Converting project file 'C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.vcproj'.">
+</Event><Event ErrorLevel="1" Project="H2D" Source="H2D.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="0" Project="H2D" Source="H2D.vcproj" Description="Done converting to new project file 'C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="H2D" Source="H2D.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="H2D.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="H2D.sln" Description="Converted">
+</Event></UpgradeLog>

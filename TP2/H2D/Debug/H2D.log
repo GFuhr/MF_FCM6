@@ -1,0 +1,26 @@
+﻿Build started 30/12/2011 16:43:36.
+     1>Project "C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\H2D.unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\libs\files\src\myfiles.c ..\libs\stringlist\src\SL.c ..\libs\stringlist\src\SL_hdf5.c ..\main\H2D.c ..\main\boundary.c ..\main\init.c ..\main\step.c ..\params\functions.c
+         functions.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         step.c
+         init.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         boundary.c
+         H2D.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         SL_hdf5.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         SL.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         myfiles.c
+     1>c:\users\guiyom\documents\my dropbox\git_repos_codes\m2_fcm6\libs\files\headers\myfiles.h(23): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "C:\Users\GuiYom\Documents\My Dropbox\git_repos_codes\M2_FCM6\H2D\H2D.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.39
