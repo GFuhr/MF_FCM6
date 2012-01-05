@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     switch(choix)
     {
-    case 1: pfFuncU0=sinus; psp->sigma=psp->sigma/((psp->dx)*(psp->Nx-1));      break;
+    case 1: pfFuncU0=sinus; psp->sigma=psp->sigma/((psp->dx)*(psp->Nx-3));      break;
     case 2: pfFuncU0=gaussienne;  break;
     case 3: pfFuncU0=porte;       break;
     default: break;
@@ -448,11 +448,11 @@ int GenerateFileName(const char *const cFilePrefix, char *const cGenerateName)
     if ((cFilePrefix==NULL)||(cGenerateName==NULL))
         return 1;
 
-    sprintf(buffer,"%s_%04d.dat\0",cFilePrefix,i);
+    sprintf(buffer,"%s_%04d.dat",cFilePrefix,i);
     while ((i<10000)&&(isFileExist(buffer)==1))
     {
         i++;
-        sprintf(buffer,"%s_%04d.dat\0",cFilePrefix,i);
+        sprintf(buffer,"%s_%04d.dat",cFilePrefix,i);
     }
 
 
@@ -495,7 +495,7 @@ int invMat1D(const double *const pSrc, double *const pDest, const unsigned int i
     pDest[1]=pSrc[1]*pBet[1];
 
     for(k=2;k<iSizeX-1;k++)
-        pDest[k]=(pSrc[k]-a[k]*pSrc[k-1])*pBet[k];
+        pDest[k]=(pSrc[k]-a[k]*pDest[k-1])*pBet[k];
 
     for(k=(iSizeX-2);k>=1;k--)
         pDest[k]-=pGam[k+1]*pSrc[k+1];
