@@ -44,7 +44,7 @@ int main(int argc, char **argv)
    fprintf(stdout,"2-Euler implicite\n");
    fprintf(stdout,"3-Runge-Kutta 4\n");
    choix=getInt();
-	
+
    switch(choix)
    {
        case 1: pfTime=resol_Euler; break;
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
    fprintf(stdout,"2-Gaussienne\n");
    fprintf(stdout,"3-Fonction porte\n");
    choix=getInt();
-	
+
    switch(choix)
    {
        case 1: pfFuncU0=sinus; psp->sigma=psp->sigma/((psp->dx)*(psp->Nx-1));      break;
@@ -104,12 +104,13 @@ int main(int argc, char **argv)
         for(j=0;j<psp->Nout;j++)
         {
 /* avancement en temps */
-		    pfTime(Xval,Un,Unp1,psp,pfOperator);            
+		    pfTime(Xval,Un,Unp1,psp,pfOperator);
 
 /*pour le pas d'apres Unp1 va devenir le nouveau Un */
             swapFields(&Un,&Unp1);
         }
-/*ecriture des profils tout les Nout iterations */        
+/*ecriture des profils tout les Nout iterations */
+        GenerateFileName("out_",cBuffer);
         writeProfil(cBuffer,Xval,Unp1,psp->Nx);
     }
 
@@ -269,7 +270,7 @@ int advec(const double *const x, const double *const un,  double *const unp1,con
 
 /*calcul des B.C.*/
     boundary(unp1,psp->Nx);
-    
+
     return 0;
 }
 
@@ -280,13 +281,13 @@ int diffus(const double *const x, const double *const un,  double *const unp1,co
     double tmp;
 
     tmp=dFac*psp->C/(psp->dx*psp->dx);
-    
+
     for(i=1;i<psp->Nx-1;i++)
         unp1[i]=tmp*(un[i+1]+un[i-1]-2*un[i]);
 
 /*calcul des B.C.*/
     boundary(unp1,psp->Nx);
-    
+
         return 0;
 }
 
@@ -294,7 +295,7 @@ int diffus(const double *const x, const double *const un,  double *const unp1,co
 int advdif(const double *const x, const double *const un,  double *const unp1,const sParam *const  psp, const double dFac)
 {
     double *Udiff=NULL,*Uadv=NULL;
-    
+
     Udiff=psp->Udiff;
     Uadv=psp->Uadv;
 
@@ -416,7 +417,7 @@ int resol_RK4(const double *const x, const double *const un,  double *const unp1
 
     addField(un,du3,Utmp,psp->Nx);
     pfop(x,Utmp,du4,psp,psp->dt);
-    
+
     for(i=0;i<psp->Nx;i++)
     {
        unp1[i]=un[i]+(1./6.)*(du1[i]+2.*du2[i]+2.*du3[i]+du4[i]);
@@ -430,7 +431,7 @@ int isFileExist(const char *const filename)
 {
     FILE *file;
     file=fopen(filename,"r");
-    
+
     if (file==NULL)
         return 0;
 
@@ -440,13 +441,13 @@ int isFileExist(const char *const filename)
 
 /* cree un nom de fichier a partir d'un prefixe qui sera incremente a chaque fois */
 int GenerateFileName(const char *const cFilePrefix, char *const cGenerateName)
-{   
+{
     char buffer[256]={0};
     unsigned int i=0;
 
     if ((cFilePrefix==NULL)||(cGenerateName==NULL))
         return 1;
-    
+
     sprintf(buffer,"%s_%04d.dat\0",cFilePrefix,i);
     while ((i<10000)&&(isFileExist(buffer)==1))
     {
@@ -457,9 +458,9 @@ int GenerateFileName(const char *const cFilePrefix, char *const cGenerateName)
 
     if (i==10000)
         return 1;
-    
+
     strcpy(cGenerateName,buffer);
-    
+
     return 0;
 }
 
@@ -473,7 +474,7 @@ int initInvMat1D(const unsigned int iSizeX, const double *const a, const double 
 {
     unsigned int k=0;
 
-    pBet[1]=b[1]; 
+    pBet[1]=b[1];
     for(k=2;k<iSizeX-1;k++)
     {
         pGam[k] = c[k-1]/pBet[k-1];
@@ -599,15 +600,15 @@ double sinus(const double x0, const double x, const double A, const double sigma
 double gaussienne(const double x0, const double x, const double A, const double sigma)
 {
     double res=0.0;
-    
-    res=A*exp(-((x-x0)*(x-x0))/(sigma*sigma)); 
+
+    res=A*exp(-((x-x0)*(x-x0))/(sigma*sigma));
     return res;
 }
 
 double porte(const double x0, const double x, const double A, const double sigma)
 {
     double res=0.0;
-    
+
     if ((x>(x0-sigma*0.5))&&(x<(x0+sigma*0.5)))
         res=A;
 

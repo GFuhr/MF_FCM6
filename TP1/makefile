@@ -13,7 +13,7 @@ CFLAGS = -O2  -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Werror-impl
 CLIBS = -lm
 
 
-all	: advdif
+all	: advdiff
 
 clean:
 	-rm -f $(PATHFILE)*.o $(PATHFILE)advdif.exe
