@@ -17,59 +17,59 @@ int main(int argc, char **argv)
     pfProfInit pfFuncU0=NULL;
 
 
-/* allocation de la structure */
+    /* allocation de la structure */
     psp=malloc(sizeof(*psp));
 
-/* initialisation de la structure et des parametres */
-   fprintf(stdout,"***Parametres***\n");
-   initParam(psp);
+    /* initialisation de la structure et des parametres */
+    fprintf(stdout,"***Parametres***\n");
+    initParam(psp);
 
-/*choix des termes et de la methode de resolution */
-   fprintf(stdout,"***Choix des termes de l'equation***\n");
-   fprintf(stdout,"1-Diffusion\n");
-   fprintf(stdout,"2-Advection\n");
-   fprintf(stdout,"3-Diffusion+Advection\n");
-   choix1=getInt();
-
-
-   switch(choix1)
-   {
-       case 1: pfOperator=diffus; break;
-       case 2: pfOperator=advec;  break;
-       case 3: pfOperator=advdif; break;
-       default: break;
-   }
-   fprintf(stdout,"***Choix de la methode de resolution***\n");
-   fprintf(stdout,"1-Euler explicite\n");
-   fprintf(stdout,"2-Euler implicite\n");
-   fprintf(stdout,"3-Runge-Kutta 4\n");
-   choix=getInt();
-
-   switch(choix)
-   {
-       case 1: pfTime=resol_Euler; break;
-       case 2: pfTime=resol_EulerI;  break;
-       case 3: pfTime=resol_RK4; break;
-       default: break;
-   }
+    /*choix des termes et de la methode de resolution */
+    fprintf(stdout,"***Choix des termes de l'equation***\n");
+    fprintf(stdout,"1-Diffusion\n");
+    fprintf(stdout,"2-Advection\n");
+    fprintf(stdout,"3-Diffusion+Advection\n");
+    choix1=getInt();
 
 
-   fprintf(stdout,"***Choix du profil initial***\n");
-   fprintf(stdout,"1-Sinus\n");
-   fprintf(stdout,"2-Gaussienne\n");
-   fprintf(stdout,"3-Fonction porte\n");
-   choix=getInt();
+    switch(choix1)
+    {
+    case 1: pfOperator=diffus; break;
+    case 2: pfOperator=advec;  break;
+    case 3: pfOperator=advdif; break;
+    default: break;
+    }
+    fprintf(stdout,"***Choix de la methode de resolution***\n");
+    fprintf(stdout,"1-Euler explicite\n");
+    fprintf(stdout,"2-Euler implicite\n");
+    fprintf(stdout,"3-Runge-Kutta 4\n");
+    choix=getInt();
 
-   switch(choix)
-   {
-       case 1: pfFuncU0=sinus; psp->sigma=psp->sigma/((psp->dx)*(psp->Nx-1));      break;
-       case 2: pfFuncU0=gaussienne;  break;
-       case 3: pfFuncU0=porte;       break;
-       default: break;
-   }
+    switch(choix)
+    {
+    case 1: pfTime=resol_Euler; break;
+    case 2: pfTime=resol_EulerI;  break;
+    case 3: pfTime=resol_RK4; break;
+    default: break;
+    }
 
 
-/* allocation memoire pour les tableaux */
+    fprintf(stdout,"***Choix du profil initial***\n");
+    fprintf(stdout,"1-Sinus\n");
+    fprintf(stdout,"2-Gaussienne\n");
+    fprintf(stdout,"3-Fonction porte\n");
+    choix=getInt();
+
+    switch(choix)
+    {
+    case 1: pfFuncU0=sinus; psp->sigma=psp->sigma/((psp->dx)*(psp->Nx-1));      break;
+    case 2: pfFuncU0=gaussienne;  break;
+    case 3: pfFuncU0=porte;       break;
+    default: break;
+    }
+
+
+    /* allocation memoire pour les tableaux */
     Udiff = malloc(sizeof(*Udiff)*psp->Nx);
     Uadv  = malloc(sizeof(*Uadv)*psp->Nx);
     Un    = malloc(sizeof(*Un)*psp->Nx);
@@ -77,44 +77,44 @@ int main(int argc, char **argv)
     Utmp  = malloc(sizeof(*Utmp)*psp->Nx);
     Xval  = malloc(sizeof(*Xval)*psp->Nx);
 
-/* initialisation des valeurs de x et u0 */
+    /* initialisation des valeurs de x et u0 */
     initProf(Xval,Un,psp,pfFuncU0);
 
-/* choix du shema implicite, initialisation matricielle en consequence */
+    /* choix du shema implicite, initialisation matricielle en consequence */
     switch(choix1)
     {
-       case 1: CreateMatrixDiffus(psp); break;
-       case 2: CreateMatrixAdvec(psp);  break;
-       case 3: CreateMatrixAdvDiff(psp); break;
-       default: break;
+    case 1: CreateMatrixDiffus(psp); break;
+    case 2: CreateMatrixAdvec(psp);  break;
+    case 3: CreateMatrixAdvDiff(psp); break;
+    default: break;
     }
     if (choix1>0)
         initInvMat1D(psp->Nx, psp->pdA, psp->pdB, psp->pdC, psp->pdGam, psp->pdBet);
 
 
-/* ecriture des profils initiaux */
+    /* ecriture des profils initiaux */
     GenerateFileName("out_",cBuffer);
     file=fopen(cBuffer,"w+");
     fclose(file);
     writeProfil(cBuffer,Xval,Un,psp->Nx);
 
-/* boucle en temps */
+    /* boucle en temps */
     for(i=0;i<psp->Npas;i+=psp->Nout)
     {
         for(j=0;j<psp->Nout;j++)
         {
-/* avancement en temps */
-		    pfTime(Xval,Un,Unp1,psp,pfOperator);
+            /* avancement en temps */
+            pfTime(Xval,Un,Unp1,psp,pfOperator);
 
-/*pour le pas d'apres Unp1 va devenir le nouveau Un */
+            /*pour le pas d'apres Unp1 va devenir le nouveau Un */
             swapFields(&Un,&Unp1);
         }
-/*ecriture des profils tout les Nout iterations */
+        /*ecriture des profils tout les Nout iterations */
         GenerateFileName("out_",cBuffer);
         writeProfil(cBuffer,Xval,Unp1,psp->Nx);
     }
 
-/* liberation de la memoire */
+    /* liberation de la memoire */
     freeParam(psp);
     free(psp),psp=NULL;
     free(Xval)  ,Xval=NULL;
@@ -135,28 +135,28 @@ int getInt(void)
     int isOk=0;
     int retour=0;
 
-  while (!isOk){
+    while (!isOk){
 
-    retour = scanf("%d%*[^\n]", &nombre);
+        retour = scanf("%d%*[^\n]", &nombre);
 
-    if ( !retour ){
-      /* erreur de saisie, on vide le flux */
-      int c;
-      while ( ((c = getchar()) != '\n') && c != EOF);
+        if ( !retour ){
+            /* erreur de saisie, on vide le flux */
+            int c;
+            while ( ((c = getchar()) != '\n') && c != EOF);
 
+
+        }
+        else {
+            /* reussite de la saisie */
+            getchar(); /* on enleve le '\n' restant */
+
+
+            isOk = 1;  /* sort de la boucle */
+        }
 
     }
-    else {
-      /* reussite de la saisie */
-      getchar(); /* on enleve le '\n' restant */
 
-
-      isOk = 1;  /* sort de la boucle */
-    }
-
-  }
-
-   return nombre;
+    return nombre;
 }
 
 /* utilisation securisee de scanf pour saisir un nombre decimal */
@@ -166,34 +166,34 @@ double getDouble(void)
     int isOk=0;
     int retour=0;
 
-  while (!isOk){
+    while (!isOk){
 
-    retour = scanf("%lf%*[^\n]", &nombre);
+        retour = scanf("%lf%*[^\n]", &nombre);
 
-    if ( !retour ){
-      /* erreur de saisie, on vide le flux */
-      int c;
-      while ( ((c = getchar()) != '\n') && c != EOF);
+        if ( !retour ){
+            /* erreur de saisie, on vide le flux */
+            int c;
+            while ( ((c = getchar()) != '\n') && c != EOF);
 
+
+        }
+        else {
+            /* reussite de la saisie */
+            getchar(); /* on enleve le '\n' restant */
+
+            isOk = 1;  /* sort de la boucle */
+        }
 
     }
-    else {
-      /* reussite de la saisie */
-      getchar(); /* on enleve le '\n' restant */
 
-      isOk = 1;  /* sort de la boucle */
-    }
-
-  }
-
-   return nombre;
+    return nombre;
 }
 
 
 /* demande de saisie des parametres utilisateurs */
 int initParam(psParam const psp)
 {
-        fprintf(stdout,"Nx=?");
+    fprintf(stdout,"Nx=?");
     psp->Nx=getInt();
     fprintf(stdout,"Npas=?");
     psp->Npas=getInt();
@@ -268,7 +268,7 @@ int advec(const double *const x, const double *const un,  double *const unp1,con
         unp1[i]=tmp*(un[i]-un[i-1]);
 
 
-/*calcul des B.C.*/
+    /*calcul des B.C.*/
     boundary(unp1,psp->Nx);
 
     return 0;
@@ -285,10 +285,10 @@ int diffus(const double *const x, const double *const un,  double *const unp1,co
     for(i=1;i<psp->Nx-1;i++)
         unp1[i]=tmp*(un[i+1]+un[i-1]-2*un[i]);
 
-/*calcul des B.C.*/
+    /*calcul des B.C.*/
     boundary(unp1,psp->Nx);
 
-        return 0;
+    return 0;
 }
 
 /* calcul d'un terme d'advection-diffusion */
@@ -300,14 +300,14 @@ int advdif(const double *const x, const double *const un,  double *const unp1,co
     Uadv=psp->Uadv;
 
 
-/* calcul de la diffusion */
+    /* calcul de la diffusion */
     diffus(x,un,Udiff,psp,dFac);
-/* calcul de l'advection */
+    /* calcul de l'advection */
     advec(x,un,Uadv,psp,dFac);
-/*addition des 2 termes */
+    /*addition des 2 termes */
     addField(Udiff,Uadv,unp1,psp->Nx);
 
-            return 0;
+    return 0;
 }
 
 /*creation d'un profil à partir d'une fonction donnee */
@@ -334,9 +334,9 @@ int writeProfil(const char *const cFileName, const double *const x, const double
     file=fopen(cFileName,"a");
     /*fwrite(u,sizeof(*u),N,file);*/
     for(i=1;i<N-1;i++)
-        fprintf(file,"%lf\t",u[i]);
+        fprintf(file,"%lf\n",u[i]);
 
-    fprintf(file,"\n");
+    /*fprintf(file,"\n");*/
     fclose(file),file=NULL;
 
     return 0;
@@ -356,8 +356,8 @@ int addField2(const double *const f1, const double *const f2, double *const fres
 {
     unsigned int i;
 
-   for(i=0;i<N;i++)
-       fres[i]=f1[i]+dFac*f2[i];
+    for(i=0;i<N;i++)
+        fres[i]=f1[i]+dFac*f2[i];
 
     return 0;
 }
@@ -377,10 +377,10 @@ int swapFields(double **f1,double **f2)
 /*algorithme d'Euler */
 int resol_Euler(const double *const x, const double *const un,  double *const unp1,const sParam *const psp, pfFuncOp pfop)
 {
-	double *Utmp;
-	Utmp=psp->Utmp;
-	pfop(x,un,Utmp,psp,psp->dt);
-	addField(un,Utmp,unp1,psp->Nx);
+    double *Utmp;
+    Utmp=psp->Utmp;
+    pfop(x,un,Utmp,psp,psp->dt);
+    addField(un,Utmp,unp1,psp->Nx);
 
     return 0;
 }
@@ -388,7 +388,7 @@ int resol_Euler(const double *const x, const double *const un,  double *const un
 /*algorithme d'Euler implicite*/
 int resol_EulerI(const double *const x, const double *const un,  double *const unp1,const sParam *const psp, pfFuncOp pfop)
 {
-	invMat1D(un, unp1, psp->Nx, psp->pdA,  psp->pdGam, psp->pdBet);
+    invMat1D(un, unp1, psp->Nx, psp->pdA,  psp->pdGam, psp->pdBet);
 
     return 0;
 }
@@ -406,7 +406,7 @@ int resol_RK4(const double *const x, const double *const un,  double *const unp1
     du4=psp->du4;
     Utmp=psp->Utmp;
 
-/* calcul des termes */
+    /* calcul des termes */
     pfop(x,un,du1,psp,psp->dt);
 
     addField2(un,du1,Utmp,psp->Nx,0.5);
@@ -420,7 +420,7 @@ int resol_RK4(const double *const x, const double *const un,  double *const unp1
 
     for(i=0;i<psp->Nx;i++)
     {
-       unp1[i]=un[i]+(1./6.)*(du1[i]+2.*du2[i]+2.*du3[i]+du4[i]);
+        unp1[i]=un[i]+(1./6.)*(du1[i]+2.*du2[i]+2.*du3[i]+du4[i]);
     }
 
     return 0;
