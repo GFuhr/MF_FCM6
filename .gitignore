@@ -3,11 +3,12 @@ TP2/H2D
 TP2/scripts
 TP2/obj/*.o
 TP2/bin/*.exe
-
+TP1/*.exe
 #outputs
 TP2/*.dat
 TP2/*.m
 TP2/*.asv
-
+TP1/*.o
+TP1/out__*.dat
 #personnal makes
 TP2/make_*
