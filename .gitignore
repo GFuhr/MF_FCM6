@@ -5,7 +5,9 @@ TP2/obj/*.o
 TP2/bin/*.exe
 
 #outputs
-TP2/H2D*.dat
+TP2/*.dat
+TP2/*.m
+TP2/*.asv
 
 #personnal makes
 TP2/make_*
