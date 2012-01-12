@@ -1,0 +1,17 @@
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+#ifndef RBM_LIBRARIES_H
+#define RBM_LIBRARIES_H
+#include "../libraries/stringlist/headers/SL.h"
+#include "../libraries/inputs/headers/input.h"
+#include "../libraries/MenuGen/headers/MenuGen.h"
+#include "../libraries/MemAlloc/headers/MemAlloc.h"
+#include "../libraries/strings/headers/mystrings.h"
+#include "../libraries/files/headers/myfiles.h"
+#endif
+
+#ifdef __cplusplus
+}
+#endif

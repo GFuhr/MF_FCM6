@@ -1,0 +1,25 @@
+include libconfig.in
+MAKE = make  --no-print-directory
+CC = icc
+CLINKER = $(CC)
+SHELL = /bin/sh
+MV = mv
+SRC = src
+PATHFILE = .
+OBJ = $(PATHFILE)/obj/$(CC)
+EXE = $(PATHFILE)/bin
+ADD_LIB = $(ADD_LIB_CFG) -L$(LIB_PERS)
+ADD_INC = $(ADD_INC_CFG) -I$(INC_PERS) 
+HEADERS = $(SRC)/include
+LIB_PERS = $(SRC)/libs/
+HEADERS = $(SRC)/include
+CFLAGS= -xHOST -Wall -g -O3 -std=c89  -unroll16 -strict-ansi -ansi-alias -ansi-const -fargument-noalias-global -opt-calloc -simd -align -ipo -openmp -vec-report5 -opt-report -parallel -opt-report-file=report_vect_icc.txt -par-report3 -finline -restrict -check-uninit -w2 -Wall -Wcheck -Wfatal-errors -Wmissing-declarations -Wmissing-prototypes -Wstrict-aliasing -Wuninitialized -Wunused-function -Wshadow -Wwrite-strings -falign-functions -fargument-noalias -DH5Gcreate_vers=2 -DH5Dcreate_vers=2 -DH5Gopen_vers=2 -DH5Dopen_vers=2
+LDFLAGS=$(ADD_LIB) -limf -lz 
+PRGM_O = 
+
+all	: emedge_icc.exe
+clean:
+	-rm $(OBJ)/*.o $(EXE)/emedge_icc.exe
+emedge_icc.exe : $(PRGM_O)
+	$(CC) $(CFLAGS) $(PRGM_O) $(CLIBS) $(LDFLAGS) -o $(EXE)/emedge_icc.exe
+

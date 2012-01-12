@@ -1,0 +1,13 @@
+Nx=8;
+tridiag=diag(1*ones(1,Nx-1),-1) + diag(-2*ones(1,Nx)) + diag(1*ones(1,Nx-1),1);
+
+tridiagper=tridiag;
+tridiagper(1,Nx)=1;
+tridiagper(Nx,1)=1;
+tridiagper
+V=ones(Nx,1)
+plot(tridiag\V)
+
+tridiagper1=tridiag;
+tridiagper1(1,1)=2*tridiag(1,1);
+tridiagper1(Nx,Nx)=tridiag(Nx,Nx)+;

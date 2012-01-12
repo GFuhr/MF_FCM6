@@ -1,11 +1,11 @@
 #visual studio configuration files
-./TP2/H2D
-./TP2/scripts
-./TP2/obj/*.o
-./TP2/bin/*.exe
+TP2/H2D
+TP2/scripts
+TP2/obj/*.o
+TP2/bin/*.exe
 
 #outputs
-./TP2/H2D*.dat
+TP2/H2D*.dat
 
 #personnal makes
-./TP2/make_*
+TP2/make_*
