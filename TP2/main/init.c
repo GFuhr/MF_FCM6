@@ -89,7 +89,7 @@ void calcMatInit(double *const pMatInit, sFieldSize const*const sFs, sFieldDiscr
             long offset = sFs->iSize1*(iy+sFs->iSize2*ic);
             for(ix=0;ix<sFs->iSize1;ix++)
             {
-                x=(double)ix*sFd->dDx1;
+                x=(double)(ix-1)*sFd->dDx1;
                 if (strcmp(discret,"fourier")==0)
                 {
                     y=(double)iy*sFd->dKx2;
@@ -119,7 +119,7 @@ static int calcSourceInit(double *const pMatInit, sFieldSize const*const sFs, sF
             long offset = sFs->iSize1*(iy+sFs->iSize2*ic);
             for(ix=0;ix<sFs->iSize1;ix++)
             {
-                x=(double)ix*sFd->dDx1;
+                x=(double)(ix-1)*sFd->dDx1;
                 if (strcmp(discret,"fourier")==0)
                 {
                     y=(double)iy*sFd->dKx2;
