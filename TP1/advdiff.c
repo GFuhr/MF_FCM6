@@ -263,7 +263,7 @@ int advec(const double *const x, const double *const un,  double *const unp1,con
     unsigned int i;
     double tmp;
 
-    tmp=dFac*(-1.*psp->V)/(2.*psp->dx);
+    tmp=dFac*(-1.*psp->V)/(psp->dx);
     for(i=1;i<psp->Nx-1;i++)
         unp1[i]=tmp*(un[i]-un[i-1]);
 
@@ -318,7 +318,7 @@ int initProf( double  *const x,  double *const u0,const sParam *const psp, const
 
     for(i=0;i<psp->Nx;i++)
     {
-        x[i]=i*psp->dx;
+        x[i]=(i-1)*psp->dx;
         u0[i]=pfpi(psp->x0,x[i],psp->A,psp->sigma);
     }
 
