@@ -55,8 +55,45 @@ int  mallocInvLapStruct(sInvLap *sLap, sFieldSize const*const sFs)
     return rbm_er;
 }
 
+int  mallocSORStruct(sSOR *sLap, sFieldSize const*const sFs)
+{
+    static const char FCNAME[] = "mallocInvLapStruct";
+    int rbm_er = 0;
+
+    sLap->vecA = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecA)));
+    if (sLap->vecA == NULL)
+    {            rbm_er=1;        }
+
+    sLap->vecB = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecB)));
+    if (sLap->vecB == NULL)
+    {            rbm_er=1;        }
+    sLap->vecC = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
+    if (sLap->vecC == NULL)
+    {            rbm_er=1;        }
+    sLap->vecD = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
+    if (sLap->vecD == NULL)
+    {            rbm_er=1;        }
+    sLap->vecE = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
+    if (sLap->vecE == NULL)
+    {            rbm_er=1;        }
+
+    return rbm_er;
+}
 
 
+int  freeSORStruct(sSOR * sIL)
+{
+    static const char FCNAME[] = "freeInvLapStruct";
+    int rbm_er = 0;
+
+    freeArray1D(sIL->vecA),sIL->vecA=NULL;
+    freeArray1D(sIL->vecB),sIL->vecB=NULL;
+    freeArray1D(sIL->vecC),sIL->vecC=NULL;
+    freeArray1D(sIL->vecD),sIL->vecD=NULL;
+    freeArray1D(sIL->vecE),sIL->vecE=NULL;
+
+    return rbm_er;
+}
 
 
 /**
@@ -97,16 +134,16 @@ static void generateTriDiagData(double *const pMatA, double *const pMatB, double
 
     if (dBC==_DIR)
     {
-    pMatC[0]=0.;
-    pMatC[1]=0.;
-    pMatA[sDiagSize-2]=0.;
-    pMatA[sDiagSize-1]=0.;
+        pMatC[0]=0.;
+        pMatC[1]=0.;
+        pMatA[sDiagSize-2]=0.;
+        pMatA[sDiagSize-1]=0.;
     }
     else if (dBC==_PER)
-        {
-            pMatC[0]=0.;
-            pMatA[sDiagSize-1]=0.;
-        }
+    {
+        pMatC[0]=0.;
+        pMatA[sDiagSize-1]=0.;
+    }
 }
 
 static void generateInvMatData(double *const pMatA, double *const pMatB, double *const pMatC, double *const pGam, double *const pBet, long const sDiagSize)
@@ -217,8 +254,8 @@ int initInvLapStructY(sInvLap * sIL, sFieldSize const *const sFs, double const d
     const long iYLen = sFs->iSize2;
     double const dInvDr2 = 1./(dDy*dDy);
     double gamma;
-    double const alpha = dFactor/dInvDr2;
-    double const beta = dFactor/dInvDr2;
+    double const alpha = dFactor*dInvDr2;
+    double const beta = dFactor*dInvDr2;
     double *const c=allocArray1D(iYLen,sizeof(*c));
     double *const u=allocArray1D(iYLen,sizeof(*u));
     double * pmlMat=  allocArray1D(sFs->iSize2,sizeof(*pmlMat));
@@ -258,13 +295,12 @@ int initInvLapStructY(sInvLap * sIL, sFieldSize const *const sFs, double const d
 
 
 /**
-*\fn RBM_codes RBM_codes invMat3Dc(pcnstField3Dc_cnst pfP, pcnstField3Dc pfInvP, sFieldSize const *const sFs, sInvLap * sIL)
-*\brief calcule le laplacien inverse d'un champ
-* attention routine utilisable uniquement dans le cas monoproc... 
+*\fn  int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const sFs, sInvLap * sIL)
+*\brief resoud le systeme lineaire pfInvP = A^(-1) pfP
 *\param pfP : champ qu'on veut 'inverser'
 *\param pfInvP : champ qui va contenir le laplacien inverse
 *\param sFs : taille du champ
-*\param sIL : 
+*\param sIL : éléments de la matrice A necessaires pour le calcul
 *\return : rien
 */
 int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const sFs, sInvLap * sIL)
@@ -452,3 +488,88 @@ static void cyclic(double const*const pField, double *const pFieldInv,sFieldSize
     }
 
 }
+
+
+static void SorRadius(double *rsor,sConst const*const psc)
+{
+    double const dstep=psc->sSteps->dDx1/psc->sSteps->dDx2;
+    double const dstep2=dstep*dstep;
+
+    *rsor=(cos(M_PI/psc->sSize->iSize1)+dstep2*cos(2*M_PI/psc->sSize->iSize2))/(1.+dstep2);
+}
+
+void initSOR(sSOR *const SorMat,sConst const*const psc, double const dFactor)
+{
+    long x,y,pos_ij;
+    double const dFx = dFactor/(psc->sSteps->dDx1*psc->sSteps->dDx1);
+    double const dFy = dFactor/(psc->sSteps->dDx2*psc->sSteps->dDx2);
+
+    SorRadius(&(SorMat->rsor),psc);
+    for(y=0;y<psc->sSize->iSize2;y++)
+    {
+        for(x=0;x<psc->sSize->iSize1;x++)
+        {
+            pos_ij=x+psc->sSize->iSize1*y;
+            SorMat->vecA[pos_ij]=dFy;
+            SorMat->vecB[pos_ij]=dFy;
+            SorMat->vecC[pos_ij]=dFx;
+            SorMat->vecD[pos_ij]=dFx;
+            SorMat->vecE[pos_ij]=1-2*(dFx+dFy);
+        }
+    }
+
+}
+
+#define MAXITS 1000
+/*#define EPS 1.0e-5*/
+void sor(double *const u,double *const RHS,sSOR const*const sMat,sFieldSize const*const sFs)
+{
+
+    int ipass,j,jsw,l,lsw,n;
+    double anorm,anormf=0.0,omega=1.0,resid;
+    double const rjac=sMat->rsor;
+    double const*const a=sMat->vecA;
+    double const*const b=sMat->vecB;
+    double const*const c=sMat->vecC;
+    double const*const d=sMat->vecD;
+    double const*const e=sMat->vecE;
+    double const*const f=RHS;
+
+    for (j=1;j<sFs->iSize2-1;j++)
+        for (l=1;l<sFs->iSize1-1;l++)
+            anormf += fabs(f[l+j*sFs->iSize1]);
+    for (n=1;n<=MAXITS;n++) {
+        anorm=0.0;
+        jsw=1;
+        for (ipass=1;ipass<=2;ipass++) {
+            lsw=jsw;
+            for (j=1;j<sFs->iSize2-1;j++) {
+                for (l=lsw;l<sFs->iSize1-1;l+=2) {
+                    long const posxy=l+j*sFs->iSize1;
+                    long const posxyp1=l+(j+1)*sFs->iSize1;
+                    long const posxym1=l+(j-1)*sFs->iSize1;
+                    long const posxp1y=l+1+(j)*sFs->iSize1;
+                    long const posxm1y=l-1+(j)*sFs->iSize1;
+                    resid=a[posxy]*u[posxyp1]
+                    +b[posxy]*u[posxym1]
+                    +c[posxy]*u[posxp1y]
+                    +d[posxy]*u[posxm1y]
+                    +e[posxy]*u[posxy]
+                    -f[posxy];
+                    anorm += fabs(resid);
+                    u[posxy] -= omega*resid/e[posxy];
+                }
+                lsw=3-lsw;
+            }
+            jsw=3-jsw;
+            omega=(n == 1 && ipass == 1 ? 1.0/(1.0-0.5*rjac*rjac) :
+                1.0/(1.0-0.25*rjac*rjac*omega));
+        }
+        if (anorm < EPS*anormf) return;
+    }
+/*    nrerror("MAXITS exceeded");*/
+}
+#undef MAXITS
+#undef EPS
+
+

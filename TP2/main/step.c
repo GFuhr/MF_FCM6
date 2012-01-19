@@ -115,7 +115,7 @@ int stepDiff_real_cn(double *const pp1,double const*const p,  sConst const*const
     }
     return 0;
 }
-/*calcul de S[y][x]+D2/Dx2(p[y][x])+D2/Dy2(p[y][x]) */
+/*calcul de pp1[y][x]=p[y][x]+ dFactor* rhs[y][x] */
 int addfields(double *const pp1,double const*const p,double const*const  rhs, double const dFactor, sFieldSize const*const sFs)
 {
     long y=0;

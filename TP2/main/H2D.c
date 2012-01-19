@@ -21,10 +21,11 @@ int main(int argc, char **argv)
 
     calcMatInit(Un,sParams.sSize,sParams.sSteps);
     /* ecriture des profils initiaux */
-    GenerateFileName("H2D_",cBuffer);
-    file=fopen(cBuffer,"w+");
-    fclose(file);
-    writeProfil(cBuffer,Un,sParams.sSize);
+    GenerateFileName("H2D_OCT_",cBuffer);
+    writeProfil(cBuffer,Un,sParams.sSize,_OCT);
+    GenerateFileName("H2D_GPLOT_",cBuffer);
+    writeProfil(cBuffer,Un,sParams.sSize,_GPLOT);
+
     /*boucle temporelle*/
     TpsEnd=sParams.Tmax;
     TpsIO=sParams.TIO;
@@ -37,6 +38,10 @@ int main(int argc, char **argv)
     else if (strcmp(scheme,"euli")==0)
     {
         pfTimeStep = euli;
+    }
+    else if (strcmp(scheme,"eulis")==0)
+    {
+        pfTimeStep = eulis;
     }
     else if (strcmp(scheme,"rk4")==0)
     {
@@ -76,8 +81,10 @@ int main(int argc, char **argv)
             swapFields(&Un,&Unp1);
         }
         /*ecriture des profils tout les Nout iterations */        
-        GenerateFileName("H2D_",cBuffer);
-        writeProfil(cBuffer,Unp1,sParams.sSize);
+        GenerateFileName("H2D_OCT_",cBuffer);
+        writeProfil(cBuffer,Unp1,sParams.sSize,_OCT);
+        GenerateFileName("H2D_GPLOT_",cBuffer);
+        writeProfil(cBuffer,Unp1,sParams.sSize,_GPLOT);
     }
 
     /*IO*/

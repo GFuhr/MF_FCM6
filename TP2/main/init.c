@@ -47,8 +47,10 @@ int getParams(sConst *const psc)
 
     psc->sInvX = allocArray1D(1,sizeof(*psc->sInvX));
     psc->sInvY = allocArray1D(1,sizeof(*psc->sInvY));
+    psc->sSorMat = allocArray1D(1,sizeof(*psc->sSorMat));
     mallocInvLapStruct(psc->sInvX,psc->sSize);
     mallocInvLapStruct(psc->sInvY,psc->sSize);
+    mallocSORStruct(psc->sSorMat,psc->sSize);
 
     for(i=0;i<psc->sSize->iSize2;i++)
     {
@@ -66,11 +68,13 @@ int getParams(sConst *const psc)
     {
         initInvLapStructX(psc->sInvX,psc->sSize,psc->sSteps->dDx1, - 0.5*psc->dEta*psc->dDt);
         initInvLapStructY(psc->sInvY,psc->sSize,psc->sSteps->dDx2, - 0.5*psc->dEta*psc->dDt);
+        initSOR(psc->sSorMat,psc,-1.*psc->dEta*psc->dDt);
     }
 
-    writeProfil("H2D_source.dat",psc->pdSource,psc->sSize);
-    writeProfil("H2D_CI.dat",psc->pInit,psc->sSize);
-
+    writeProfil("H2D_OCT_source.dat",psc->pdSource,psc->sSize,_OCT);
+    writeProfil("H2D_OCT_CI.dat",psc->pInit,psc->sSize,_OCT);
+    writeProfil("H2D_GPLOT_source.dat",psc->pdSource,psc->sSize,_GPLOT);
+    writeProfil("H2D_GPLOT_CI.dat",psc->pInit,psc->sSize,_GPLOT);
     return 0;
 
 }
@@ -140,12 +144,16 @@ static int calcSourceInit(double *const pMatInit, sFieldSize const*const sFs, sF
 
 
 /* ecriture du profil dans un fichier */
-int writeProfil(const char *const cFileName, const double *const u, sFieldSize const*const sFs)
+int writeProfil(const char *const cFileName, const double *const u, sFieldSize const*const sFs,H2D_IO_FORMAT format)
 {
     FILE *file=NULL;
     long x,y,z;
 
     file=fopen(cFileName,"w");
+    if (format==_GPLOT)
+    {
+
+    
     for(z=0;z<sFs->iSizeC;z++)
     {
         for(y=0;y<sFs->iSize2;y++)
@@ -158,6 +166,22 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
             /*fprintf(file,"\n");*/
         }
     }
+    }
+    else
+    {
+        for(z=0;z<sFs->iSizeC;z++)
+        {
+            for(y=0;y<sFs->iSize2;y++)
+            {
+                for(x=0;x<sFs->iSize1;x++)
+                {
+                    long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
+                    fprintf(file,"%lf\t",u[pos]);
+                }
+                fprintf(file,"\n");
+            }
+        }
+    }
 
     fclose(file),file=NULL;
 
@@ -166,6 +190,9 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
 
 void freeParams(sConst *psc)
 {
+    freeInvLapStruct(psc->sInvX);
+    freeInvLapStruct(psc->sInvY);
+    freeSORStruct(psc->sSorMat);
     freeArray1D(psc->sSize);     /*! <  taille globale du champs */
     freeArray1D(psc->sSteps);      /*! < valeur des pas dx,ky,dz dans l'espace de fourier */
 

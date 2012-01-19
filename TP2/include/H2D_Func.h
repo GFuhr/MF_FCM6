@@ -22,7 +22,7 @@ void null_bc(double *const field,sFieldSize const*const sFs);
 
 int getParams(sConst *const psc);
 void freeParams(sConst *psc);
-int writeProfil(const char *const cFileName, const double *const u, sFieldSize const*const sFs);
+int writeProfil(const char *const cFileName, const double *const u, sFieldSize const*const sFs,H2D_IO_FORMAT ioformat);
 void calcMatInit(double *const pMatInit, sFieldSize const*const sFs, sFieldDiscret const*const sFd);
 
 
@@ -34,5 +34,9 @@ int initInvLapStructY(sInvLap * sIL, sFieldSize const *const sFs, double const d
 int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const sFs, sInvLap * sIL);
 int  freeInvLapStruct(sInvLap * sIL);
 int  mallocInvLapStruct(sInvLap *sLap, sFieldSize const*const sFs);
+void sor(double *const u,double *const RHS,sSOR const*const sMat,sFieldSize const*const sFs);
+void initSOR(sSOR *const SorMat,sConst const*const psc, double const dFactor);
+int  mallocSORStruct(sSOR *sLap, sFieldSize const*const sFs);
+int  freeSORStruct(sSOR * sIL);
 
 #endif

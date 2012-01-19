@@ -18,7 +18,7 @@ extern "C" {
 #define LX 128*M_PI
 #define LY 128*M_PI
 #define discret "real"
-#define scheme "cn"
+#define scheme "eulis"
 
 /* possible values for scheme :
  * "eule"

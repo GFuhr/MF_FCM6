@@ -45,6 +45,8 @@ typedef enum { _EULE,_EULI,_RK2,_RK4,_CN } H2D_scheme;
 
 typedef enum { _DIR,_NM,_PER } H2D_BC;
 
+typedef enum { _OCT,_GPLOT } H2D_IO_FORMAT;
+
 
 typedef  double *pField1D;
 typedef  double **pField2D;
@@ -173,7 +175,20 @@ typedef struct _sInvLap
     double gamma;
 }sInvLap,*psInvLap;
 
+/**
+*\struct _sInvLap
+    *\brief Structure contenant les matrices utilises pour l'inversion du laplacien
+*/
+typedef struct _sSOR
+{
 
+  double * vecA;
+    double * vecB;
+    double * vecC;
+    double * vecD;
+    double * vecE;
+    double rsor;
+}sSOR,*psSOR;
 
 typedef struct sConst
 {
@@ -206,8 +221,9 @@ typedef struct sConst
     double *pUk3;
     double *pUk4;
 
-    sInvLap *sInvX;
-    sInvLap *sInvY;
+    sInvLap *sInvX;     /*! < formulation matricielle du laplacien suivant X*/
+    sInvLap *sInvY;      /*! < formulation matricielle du laplacien suivant Y*/
+    sSOR    *sSorMat;    /*! < vecteurs utilisés dans la méthode de relaxation*/
 
     H2D_INV_DIRECT eDir;
 
@@ -227,5 +243,6 @@ typedef int (*pfstep)         (double *const ,double const*const , sConst const*
 #ifdef __cplusplus
 }
 #endif
+
 
 
