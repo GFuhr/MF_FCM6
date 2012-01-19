@@ -2,6 +2,7 @@
 TP2/H2D
 TP2/scripts
 TP2/obj/*.o
+TP2/obj/gcc/*.o
 TP2/bin/*.exe
 TP1/*.exe
 #outputs
