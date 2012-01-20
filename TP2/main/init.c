@@ -132,13 +132,13 @@ static int calcSourceInit(double *const pMatInit, sFieldSize const*const sFs, sF
                 {
                     y=(double)iy*sFd->dDx2;
                 }
-                    pMatInit[ix+offset]=source(x,y, ic);
+                pMatInit[ix+offset]=source(x,y, ic);
 
 
             }
         }
     }
-        return 0;
+    return 0;
 }
 
 
@@ -153,19 +153,19 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
     if (format==_GPLOT)
     {
 
-    
-    for(z=0;z<sFs->iSizeC;z++)
-    {
-        for(y=0;y<sFs->iSize2;y++)
+
+        for(z=0;z<sFs->iSizeC;z++)
         {
-            for(x=0;x<sFs->iSize1;x++)
+            for(y=0;y<sFs->iSize2;y++)
             {
-                long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
-                fprintf(file,"%.12lf\t%.12lf\t%.12lf\n",(double)x,(double)(y+z*sFs->iSize1),u[pos]);
+                for(x=0;x<sFs->iSize1;x++)
+                {
+                    long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
+                    fprintf(file,"%.12lf\t%.12lf\t%.12lf\n",(double)x,(double)(y+z*sFs->iSize1),u[pos]);
+                }
+                /*fprintf(file,"\n");*/
             }
-            /*fprintf(file,"\n");*/
         }
-    }
     }
     else
     {
