@@ -14,15 +14,15 @@
 
 #ifndef SL_SL_H
 #define SL_SL_H
-#include <stdlib.h>        
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "../../inputs/headers/input.h"
 #include "../../strings/headers/mystrings.h"
 #include "../../files/headers/myfiles.h"
 
-#define SL_HDF5
-#include "hdf5.h"
+/*#define SL_HDF5
+#include "hdf5.h"*/
 
 
 /**
@@ -32,11 +32,11 @@
  * SL_ID contient les identifiants pour les types de donnees pouvant etre utilises
  */
 enum SL_ID_CODE{    SL_FLOAT,
-                    SL_DOUBLE,        
-                    SL_INT,           
-                    SL_CHAR,         
-                    SL_STRING,       
-                    SL_LONG,         
+                    SL_DOUBLE,
+                    SL_INT,
+                    SL_CHAR,
+                    SL_STRING,
+                    SL_LONG,
                     SL_SIZE_T,
                     SL_UNDEF};
 typedef enum SL_ID_CODE SL_ID;
@@ -58,7 +58,7 @@ typedef enum SL_ID_CODE SL_ID;
  *
  * SL_ID contient les identifiants pour les types de donnees pouvant etre utilises
  */
-enum SL_ID_ERROR{SL_OK, 
+enum SL_ID_ERROR{SL_OK,
                     SL_ERROR,                 /*! < Une erreur est survenue*/
                     SL_ERROR_FILE_EXIST,      /*! < Tentative de creation d'un fichier deja existant*/
                     SL_ERROR_READ,            /*! < Erreur de lecture*/
@@ -105,7 +105,7 @@ typedef struct _SL_Var
 
 
 /**
-*\struct SLelement 
+*\struct SLelement
 *\brief Structure contenant les elements du menu
 */
 typedef struct _SLelement
@@ -118,7 +118,7 @@ typedef struct _SLelement
 }SLelement,*psSLelement;
 
 /**
-*\struct sSL 
+*\struct sSL
 *\brief Structure de base de la liste chainee contenant la liste des variables
 */
 typedef struct _SL

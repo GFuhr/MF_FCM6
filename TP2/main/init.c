@@ -161,7 +161,7 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
             for(x=0;x<sFs->iSize1;x++)
             {
                 long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
-                fprintf(file,"%lf\t%lf\t%lf\n",(double)x,(double)(y+z*sFs->iSize1),u[pos]);
+                fprintf(file,"%.12lf\t%.12lf\t%.12lf\n",(double)x,(double)(y+z*sFs->iSize1),u[pos]);
             }
             /*fprintf(file,"\n");*/
         }
@@ -176,7 +176,7 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
                 for(x=0;x<sFs->iSize1;x++)
                 {
                     long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
-                    fprintf(file,"%lf\t",u[pos]);
+                    fprintf(file,"%.12lf\t",u[pos]);
                 }
                 fprintf(file,"\n");
             }

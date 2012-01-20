@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="..\libs\stringlist\headers\SL.h" open="1" top="0" tabpos="1">
+		<Cursor position="4731" topLine="123" />
+	</File>
+	<File name="..\libs\stringlist\src\SL.c" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="..\libs\stringlist\src\SL_hdf5.c" open="1" top="0" tabpos="2">
+		<Cursor position="12005" topLine="395" />
+	</File>
+	<File name="..\main\H2D.c" open="1" top="1" tabpos="5">
+		<Cursor position="1173" topLine="45" />
+	</File>
+	<File name="..\main\fourier.c" open="1" top="0" tabpos="4">
+		<Cursor position="241" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

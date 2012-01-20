@@ -1,4 +1,7 @@
+#include "../include/H2D_types.h"
 
+static void transposefieldR(double const*const F, double *const Utrans, sFieldSize const*const sFs);
+static void transposefieldC(double const*const F, double *const Utrans, sFieldSize const*const sFs);
 
 static void transposefieldR(double const*const F, double *const Utrans, sFieldSize const*const sFs)
 {

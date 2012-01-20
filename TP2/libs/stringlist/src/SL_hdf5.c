@@ -4,7 +4,7 @@
 *\version 2.0
 *\date 2011/04/01
 *
-* 
+*
 *
 */
 
@@ -16,7 +16,7 @@
 #ifndef FALSE
 #define FALSE 0
 #endif
-
+#ifdef SL_HDF5
 /**
 *\fn SL_codes  SLToHDF5Type(SL_ID_CODE SLvarType)
 *\brief convertit un type de donnee utilise par la librairie stringlist par un type compatible hdf5
@@ -34,22 +34,22 @@ hid_t  SLToHDF5Type(SL_ID SLvarType)
     case SL_INT    :
         hdf5_type = H5T_STD_I32LE;
         break;
-    case SL_LONG   : 
+    case SL_LONG   :
         hdf5_type = H5T_STD_I64LE;
         break;
-    case SL_DOUBLE : 
+    case SL_DOUBLE :
         hdf5_type = H5T_IEEE_F64LE;
         break;
-    case SL_FLOAT  : 
+    case SL_FLOAT  :
         hdf5_type = H5T_IEEE_F32LE;
         break;
-    case SL_CHAR   : 
+    case SL_CHAR   :
         hdf5_type = H5T_STD_I8LE;
         break;
-    case SL_SIZE_T   : 
+    case SL_SIZE_T   :
         hdf5_type = H5T_STD_U64LE;
         break;
-    case SL_STRING : 
+    case SL_STRING :
         hdf5_type = H5T_STD_I8LE;
         break;
     }
@@ -78,27 +78,27 @@ SL_ID  HDF5ToSlType(hid_t h5vartype)
     {
         sl_type=SL_INT;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_FLOAT))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_FLOAT))>0)
     {
         sl_type=SL_FLOAT;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_DOUBLE))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_DOUBLE))>0)
     {
         sl_type=SL_DOUBLE;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_CHAR))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_CHAR))>0)
     {
         sl_type=SL_CHAR;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_STRING))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_STRING))>0)
     {
         sl_type=SL_STRING;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_LONG))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_LONG))>0)
     {
         sl_type=SL_LONG;
     }
-    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_SIZE_T))>0) 
+    else if (H5Tequal(h5vartype,SLToHDF5Type(SL_SIZE_T))>0)
     {
         sl_type=SL_SIZE_T;
     }
@@ -148,19 +148,19 @@ SL_CODE  SL_writeFileHDF5(psSL const pssl,char const*const groupname)
             ptrVal = &pslCur->Var.value.slInt;
             var_datatype = SLToHDF5Type(SL_INT);
             break;
-        case SL_LONG   : 
+        case SL_LONG   :
             ptrVal = &pslCur->Var.value.slLong;
             var_datatype = SLToHDF5Type(SL_LONG);
             break;
-        case SL_DOUBLE : 
+        case SL_DOUBLE :
             ptrVal = &pslCur->Var.value.slDouble;
             var_datatype = SLToHDF5Type(SL_DOUBLE);
             break;
-        case SL_FLOAT  : 
+        case SL_FLOAT  :
             ptrVal = &pslCur->Var.value.slFloat;
             var_datatype = SLToHDF5Type(SL_FLOAT);
             break;
-        case SL_CHAR   : 
+        case SL_CHAR   :
             ptrVal = &pslCur->Var.value.slChar;
             var_datatype = SLToHDF5Type(SL_CHAR);
             break;
@@ -168,7 +168,7 @@ SL_CODE  SL_writeFileHDF5(psSL const pssl,char const*const groupname)
             ptrVal = &pslCur->Var.value.slSize_t;
             var_datatype = SLToHDF5Type(SL_SIZE_T);
             break;
-        case SL_STRING : 
+        case SL_STRING :
             dims[0]=strlen(pslCur->Var.value.slString)+1;
             ptrVal = pslCur->Var.value.slString;
                 var_datatype = SLToHDF5Type(SL_STRING);
@@ -180,7 +180,7 @@ SL_CODE  SL_writeFileHDF5(psSL const pssl,char const*const groupname)
 
         /* create dataset. */
         mysnprintf(buffer,256,"%s/%s",groupname,pslCur->sVarName);
-        
+
         /*check if dataset exist*/
         if (isObjectExist(pssl,buffer)==SL_OK)
         {
@@ -204,12 +204,12 @@ SL_CODE  SL_writeFileHDF5(psSL const pssl,char const*const groupname)
         else
         {
             dataspace_id = H5Screate_simple(1, dims, NULL);
-            dataset_id = H5Dcreate(pssl->file_hdf5, buffer, var_datatype, dataspace_id, 
+            dataset_id = H5Dcreate(pssl->file_hdf5, buffer, var_datatype, dataspace_id,
                 H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
         }
 
         /* Write the dataset. */
-        status = H5Dwrite(dataset_id, var_datatype, H5S_ALL, H5S_ALL, H5P_DEFAULT, 
+        status = H5Dwrite(dataset_id, var_datatype, H5S_ALL, H5S_ALL, H5P_DEFAULT,
             ptrVal);
         status = H5Dclose (dataset_id);
         if (dataspace_id>=0)
@@ -281,7 +281,7 @@ SL_CODE  isObjectExist(psSL stringlist,char const*const objectname)
 
 /**
 *\fn RBM_codes  SL_closeHDF5File(psSL stringlist, char const*const filename)
-*\brief   fermeture d'un fichier hdf5 
+*\brief   fermeture d'un fichier hdf5
 *\param  stringlist : objet stringlist associe au fichier
 *\return : SL_OK
 */
@@ -333,14 +333,14 @@ SL_CODE  SL_readFileHDF5(psSL const pssl,char const*const groupname)
 
 
 /**
-*\fn herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, void *op_data) 
+*\fn herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, void *op_data)
 *\brief fonction "callback" utilise par H5Literate pour parcourir le groupe et mettre en place la stringlist
-*\param  : 
-*\param  : 
-*\param  : 
+*\param  :
+*\param  :
+*\param  :
 *\return : RBM_OK
 */
-herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, void *op_data) 
+herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, void *op_data)
 {
     herr_t          status, return_val = 0;
     H5O_info_t      infobuf;
@@ -387,12 +387,12 @@ herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, vo
                 pval=&sl_var.value.slInt;
 
             }
-            else if (H5Tequal(dtype,SLToHDF5Type(SL_FLOAT))>0) 
+            else if (H5Tequal(dtype,SLToHDF5Type(SL_FLOAT))>0)
             {
                 sl_var.type=SL_FLOAT;
                 pval=&sl_var.value.slFloat;
             }
-            else if (H5Tequal(dtype,SLToHDF5Type(SL_DOUBLE))>0) 
+            else if (H5Tequal(dtype,SLToHDF5Type(SL_DOUBLE))>0)
             {
                 sl_var.type=SL_DOUBLE;
                 pval=&sl_var.value.slDouble;
@@ -402,18 +402,18 @@ herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, vo
                 sl_var.type=SL_CHAR;
                 pval=&sl_var.value.slChar;
             }
-            else if (H5Tequal(dtype,SLToHDF5Type(SL_STRING))>0) 
+            else if (H5Tequal(dtype,SLToHDF5Type(SL_STRING))>0)
             {
                 sl_var.type=SL_STRING;
                 sl_var.value.slString=malloc((rdims[0]+1)*sizeof(*sl_var.value.slString));
                 pval=sl_var.value.slString;
             }
-            else if (H5Tequal(dtype,SLToHDF5Type(SL_LONG))>0) 
+            else if (H5Tequal(dtype,SLToHDF5Type(SL_LONG))>0)
             {
                 sl_var.type=SL_LONG;
                 pval=&sl_var.value.slLong;
             }
-            else if (H5Tequal(dtype,SLToHDF5Type(SL_SIZE_T))>0) 
+            else if (H5Tequal(dtype,SLToHDF5Type(SL_SIZE_T))>0)
             {
                 sl_var.type=SL_SIZE_T;
                 pval=&sl_var.value.slSize_t;
@@ -435,4 +435,5 @@ herr_t op_stringlist( hid_t loc_id, const char *name, const H5L_info_t *info, vo
     }
     return return_val;
 }
+#endif
 
