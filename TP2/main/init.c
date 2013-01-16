@@ -22,7 +22,7 @@ int getParams(sConst *const psc)
     psc->sSteps->dKx1  = 2.*M_PI/(double)(LX);
     psc->sSteps->dKx2  = 2.*M_PI/(double)(LY);
 
-    /*complexe ou reels depends du schema utilise*/
+    /*complex or reals depending on scheme*/
     if (strcmp(discret,"fourier")==0)
     {
         psc->sSize->iSizeC = 2;
@@ -143,7 +143,7 @@ static int calcSourceInit(double *const pMatInit, sFieldSize const*const sFs, sF
 
 
 
-/* ecriture du profil dans un fichier */
+/* write profiles in file */
 int writeProfil(const char *const cFileName, const double *const u, sFieldSize const*const sFs,H2D_IO_FORMAT format)
 {
     FILE *file=NULL;
@@ -193,14 +193,14 @@ void freeParams(sConst *psc)
     freeInvLapStruct(psc->sInvX);
     freeInvLapStruct(psc->sInvY);
     freeSORStruct(psc->sSorMat);
-    freeArray1D(psc->sSize);     /*! <  taille globale du champs */
-    freeArray1D(psc->sSteps);      /*! < valeur des pas dx,ky,dz dans l'espace de fourier */
+    freeArray1D(psc->sSize);     
+    freeArray1D(psc->sSteps);    
 
-    freeArray1D(psc->pdSource);                  /*! < champ 1D contenant le profil de source*/
+    freeArray1D(psc->pdSource);  
 
-    freeArray1D(psc->pInit);                  /*! < champ 1D contenant le profil de source*/
+    freeArray1D(psc->pInit);     
 
-    freeArray1D(psc->pdMKy);                      /*! < tableau 1D contenant les valeur de m*ky pour O<m<Mmax */
+    freeArray1D(psc->pdMKy);     
 
 
     freeArray1D(psc->pUrhs);
@@ -214,29 +214,4 @@ void freeParams(sConst *psc)
     freeArray1D(psc->sInvX);
     freeArray1D(psc->sInvY);
 }
-/*
 
-void initParams(sConst *psc)
-{
-freeArray1D(psc->sSize);    
-freeArray1D(psc->sSteps);      
-
-freeArray1D(psc->pdSource);                 
-
-freeArray1D(psc->pInit);                 
-
-freeArray1D(psc->pdMKy);                  
-
-
-freeArray1D(psc->pUrhs);
-freeArray1D(psc->pUtmp);
-
-freeArray1D(psc->pUk1);
-freeArray1D(psc->pUk2);
-freeArray1D(psc->pUk3);
-freeArray1D(psc->pUk4);
-
-freeArray1D(psc->sInvW);;
-
-}
-*/

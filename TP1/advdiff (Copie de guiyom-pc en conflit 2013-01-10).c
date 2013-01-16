@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     switch(choix)
     {
-    case 1: pfFuncU0=sinus; psp->sigma./((psp->dx)*(psp->Nx-3.));      break;
+    case 1: pfFuncU0=sinus; psp->sigma/=((psp->dx)*(psp->Nx-3.));      break;
     case 2: pfFuncU0=gaussienne;  break;
     case 3: pfFuncU0=porte;       break;
     default: break;
@@ -214,7 +214,7 @@ int initParam(psParam const psp)
     fprintf(stdout,"Dt=?");
     psp->dt=getDouble();
 
-
+    
     psp->du1   = malloc( sizeof(*psp->du1)  *psp->Nx);
     psp->du2   = malloc( sizeof(*psp->du2)  *psp->Nx);
     psp->du3   = malloc( sizeof(*psp->du3)  *psp->Nx);
@@ -251,10 +251,9 @@ int freeParam(sParam *const psp)
 /*condition de bords avec une precision dx^2*/
 int boundary(double *const u, const unsigned int N)
 {
-    u[0]=-u[2];
-    u[N-1]=-u[N-3];
+    u[0]   = -u[2];
+    u[N-1] = -u[N-3];
     return 0;
-
 }
 
 /* calcul d'un terme d'advection */
@@ -278,7 +277,9 @@ int advec(const double *const x, const double *const un,  double *const unp1,con
 int diffus(const double *const x, const double *const un,  double *const unp1,const sParam *const  psp, const double dFac)
 {
     unsigned int i;
-    double const tmp=dFac*psp->C/(psp->dx*psp->dx);
+    double tmp;
+
+    tmp=dFac*psp->C/(psp->dx*psp->dx);
 
     for(i=1;i<psp->Nx-1;i++)
         unp1[i]=tmp*(un[i+1]+un[i-1]-2*un[i]);
@@ -316,7 +317,7 @@ int initProf( double  *const x,  double *const u0,const sParam *const psp, const
 
     for(i=0;i<psp->Nx;i++)
     {
-        x[i]=((double)i-1.)*psp->dx;
+        x[i]=(i-1.)*psp->dx;
         u0[i]=pfpi(psp->x0,x[i],psp->A,psp->sigma);
     }
 
@@ -588,10 +589,8 @@ int CreateMatrixAdvDiff( sParam *const psp)
 
 double sinus(const double x0, const double x, const double A, const double sigma)
 {
-    double res=0.0;
-    double const  dpi=4.*atan(1.);
-
-    res=A*sin(dpi*(x-x0)*sigma);
+    double const dpi=4.*atan(1.);
+    double const res=A*sin(dpi*(x-x0)*sigma);
     return res;
 }
 

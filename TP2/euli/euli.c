@@ -28,9 +28,7 @@ int euli(double *const Up1, double const*const U, sConst const*const psc,pfLinea
 }
 
 
-#include "../include/H2D_types.h"
-#include "../include/H2D_Func.h"
-#include "../params/params.h"
+
 
 int eulis(double *const Up1, double const*const U, sConst const*const psc,pfLinearOp pfTimeStep, pfBC pfBoundary)
 {

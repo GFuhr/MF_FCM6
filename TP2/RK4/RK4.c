@@ -24,7 +24,7 @@ int RK4(double *const Up1, double const*const U, sConst const*const psc,pfLinear
 
     /*calcul de K4*/
     pfTimeStep(psc->pUk4,psc->pUtmp,psc);
-/*    psc->pfBoundary(Up1,U,psc->pUk1,psc->dDt,psc->sSize);*/
+
     
 
     addRK4(Up1,U,psc->pUk1,psc->pUk2,psc->pUk3,psc->pUk4,psc->dDt,psc->sSize);

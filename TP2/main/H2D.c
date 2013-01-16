@@ -12,21 +12,20 @@ int main(int argc, char **argv)
     pfBC   pfBoundary=NULL;
     pfLinearOp pfRHS=NULL;
 
-    /*initialisation variables*/
-    /*on recupere les informations sur la simulation, ainsi que les profils initiaux et de source */
+    /*initialisation of variables and profiles*/
     getParams(&sParams);
 
     Un   = allocArray1D(sParams.sSize->iSize1*sParams.sSize->iSize2*sParams.sSize->iSizeC,sizeof(*Un));
     Unp1 = allocArray1D(sParams.sSize->iSize1*sParams.sSize->iSize2*sParams.sSize->iSizeC,sizeof(*Unp1));
 
     calcMatInit(Un,sParams.sSize,sParams.sSteps);
-    /* ecriture des profils initiaux */
+    /* initial profiles outputs */
     GenerateFileName("H2D_OCT_",cBuffer);
     writeProfil(cBuffer,Un,sParams.sSize,_OCT);
     GenerateFileName("H2D_GPLOT_",cBuffer);
     writeProfil(cBuffer,Un,sParams.sSize,_GPLOT);
 
-    /*boucle temporelle*/
+    /*time loop*/
     TpsEnd=sParams.Tmax;
     TpsIO=sParams.TIO;
 
@@ -74,13 +73,13 @@ int main(int argc, char **argv)
     {
         for(j=0;j<TpsIO;j++)
         {
-            /* avancement en temps */
+            /* time step */
             pfTimeStep(Unp1,Un,&sParams,pfRHS,pfBoundary);            
 
-            /*pour le pas d'apres Unp1 va devenir le nouveau Un */
+            /* Unp1 becomes Un for next step*/
             swapFields(&Un,&Unp1);
         }
-        /*ecriture des profils tout les Nout iterations */        
+        /*data are saved each Nout iterations */        
         GenerateFileName("H2D_OCT_",cBuffer);
         writeProfil(cBuffer,Unp1,sParams.sSize,_OCT);
         GenerateFileName("H2D_GPLOT_",cBuffer);
@@ -93,7 +92,7 @@ int main(int argc, char **argv)
 
 
 
-    /*liberation memoire allouee*/
+    /*garbage collector*/
     freeArray1D(Un);
     freeArray1D(Unp1);
     freeParams(&sParams);

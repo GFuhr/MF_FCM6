@@ -388,7 +388,7 @@ int  myGetLineNumber(char const * const filename, size_t *LineNumber)
 /*int mygetLineNumber()*/
 
 
-/*RBM_codes    isHDF5File(char const*const filename);*/
+
 
 
 /**

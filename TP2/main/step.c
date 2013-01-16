@@ -115,6 +115,7 @@ int stepDiff_real_cn(double *const pp1,double const*const p,  sConst const*const
     }
     return 0;
 }
+
 /*calcul de pp1[y][x]=p[y][x]+ dFactor* rhs[y][x] */
 int addfields(double *const pp1,double const*const p,double const*const  rhs, double const dFactor, sFieldSize const*const sFs)
 {
@@ -161,7 +162,7 @@ int cleanfields(double *const pp1,double const*const p,double const*const  rhs, 
 }
 
 
-/* inversion des tableaux associes aux variables f1 et f2 */
+/* arrays associated to f1 and f2 are switched : f1->f2 and f2->f1*/
 void swapFields(double **f1,double **f2)
 {
     double *ptmp;
