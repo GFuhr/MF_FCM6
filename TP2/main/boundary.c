@@ -9,11 +9,11 @@ void fourier_bc(double *const field,sFieldSize const*const sFs)
     long const offset = sFs->iSize1*sFs->iSize2;
     for (y=0;y<sFs->iSize2;y++)
     {
-        field[y*sFs->iSize1]       = -field[y*sFs->iSize1+2]; /*f[0]=-f[2] for each y*/
-        field[(y+1)*sFs->iSize1-1] = -field[(y+1)*sFs->iSize1-3];/*f[Nx+1]=-f[Nx-1] for each y*/
+        field[y*sFs->iSize1]       = -field[y*sFs->iSize1+2]; /*f[0,y]=-f[2,y] for each y*/
+        field[(y+1)*sFs->iSize1-1] = -field[(y+1)*sFs->iSize1-3];/*f[Nx+1,y]=-f[Nx-1,y] for each y*/
 
-        field[offset+y*sFs->iSize1]       = -field[offset+y*sFs->iSize1+2]; /*f[0]=-f[2] for each y*/
-        field[offset+(y+1)*sFs->iSize1-1] = -field[offset+(y+1)*sFs->iSize1-3];/*f[Nx+1]=-f[Nx-1] for each y*/
+        field[offset+y*sFs->iSize1]       = -field[offset+y*sFs->iSize1+2]; /*f[0,y]=-f[2,y] for each y*/
+        field[offset+(y+1)*sFs->iSize1-1] = -field[offset+(y+1)*sFs->iSize1-3];/*f[Nx+1,y]=-f[Nx-1,y] for each y*/
 
     }
 }
@@ -27,14 +27,14 @@ void real_bc(double *const field,sFieldSize const*const sFs)
 
     for (x=0;x<sFs->iSize1;x++)
     {
-        field[x]       = field[sFs->iSize1*(sFs->iSize2-2)+x]; /*f[0]=-f[2] for each y*/
-        field[sFs->iSize1*(sFs->iSize2-1)+x] = field[sFs->iSize1+x];/*f[Nx+1]=-f[Nx-1] for each y*/
+        field[x]       = field[sFs->iSize1*(sFs->iSize2-2)+x];      /*f[x,0]    = f[x,Ny-2] for each x*/
+        field[sFs->iSize1*(sFs->iSize2-1)+x] = field[sFs->iSize1+x];/*f[x,Ny-1] = f[x,1] for each y*/
     }
 
     for (y=0;y<sFs->iSize2;y++)
     {
-        field[y*sFs->iSize1]       = -field[y*sFs->iSize1+2]; /*f[0]=-f[2] for each y*/
-        field[(y+1)*sFs->iSize1-1] = -field[(y+1)*sFs->iSize1-3];/*f[Nx+1]=-f[Nx-1] for each y*/
+        field[y*sFs->iSize1]       = -field[y*sFs->iSize1+2]; /*f[0,y]=-f[2,y] for each y*/
+        field[(y+1)*sFs->iSize1-1] = -field[(y+1)*sFs->iSize1-3];/*f[Nx+1,y]=-f[Nx-1,y] for each y*/
    }
 
 

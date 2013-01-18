@@ -20,6 +20,8 @@ extern "C" {
 #define discret "real"
 #define scheme "eulis"
 
+#define _boundary "other"
+
 /* possible values for scheme :
  * "eule"
  * "euli"
@@ -30,6 +32,12 @@ extern "C" {
 /* possible values for discret :
  * "fourier"
  * "real"
+ * */
+
+
+/* possible values for discret :
+ * "null"
+ * "other"
  * */
 #endif
 
