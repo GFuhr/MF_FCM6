@@ -68,6 +68,11 @@ int main(int argc, char **argv)
     }
 
 
+if (strcmp(_boundary,"null")==0)
+    {
+        pfBoundary=null_bc;
+    }
+
 
     for(i=0;i<TpsEnd;i+=TpsIO)
     {

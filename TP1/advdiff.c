@@ -251,8 +251,8 @@ int freeParam(sParam *const psp)
 /*condition de bords avec une precision dx^2*/
 int boundary(double *const u, const unsigned int N)
 {
-    u[0]=-u[2];
-    u[N-1]=-u[N-3];
+    u[0]   = -u[2];
+    u[N-1] = -u[N-3];
     return 0;
 
 }
@@ -308,7 +308,7 @@ int advdif(const double *const x, const double *const un,  double *const unp1,co
     return 0;
 }
 
-/*creation d'un profil à partir d'une fonction donnee */
+/*creation d'un profil Ã  partir d'une fonction donnee */
 int initProf( double  *const x,  double *const u0,const sParam *const psp, const pfProfInit  pfpi)
 {
     unsigned int i;
