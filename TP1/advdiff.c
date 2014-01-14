@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     switch(choix)
     {
-    case 1: pfFuncU0=sinus; psp->sigma=/((psp->dx)*(psp->Nx-3.));      break;
+    case 1: pfFuncU0=sinus; psp->sigma=1/((psp->dx)*(psp->Nx-3.));      break;
     case 2: pfFuncU0=gaussienne;  break;
     case 3: pfFuncU0=porte;       break;
     default: break;
