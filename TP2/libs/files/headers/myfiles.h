@@ -39,3 +39,7 @@ int  myGetLineNumber(char const * const filename, size_t *LineNumber);
 int  mygetFileExt(char const*const filename, char *const name, char *const fileExt);
 
 #endif
+
+#ifdef __cplusplus
+}
+#endif

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
+
 
 /* structure contenant l'ensemble des parametres, tableaux intermediaires importants */
 typedef struct
@@ -49,12 +51,12 @@ double porte(const double, const double, const double, const double);
 
 int initParam(psParam const psp);
 int freeParam(psParam const psp);
-
+int printParam(psParam const psp);
 
 
 int swapFields(double **f1,double **f2);
 
-int addField(const double *f1, const double *f2, double *const fres, const unsigned int N);
+int addField(const double *const f1, const double *const f2, double *const fres, const unsigned int N);
 int addField2(const double *const f1, const double *const f2, double *const fres, const unsigned int N, const double dFac);
 
 /*schemas temporels */

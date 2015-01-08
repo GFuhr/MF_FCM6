@@ -1,7 +1,6 @@
 #include "advdiff.h"
 
 
-
 int main(int argc, char **argv)
 {
     double *Udiff=NULL, *Uadv=NULL, *Un=NULL, *Unp1=NULL, *Xval=NULL, *Utmp=NULL;
@@ -15,17 +14,20 @@ int main(int argc, char **argv)
     pfFuncOp pfOperator=NULL;
     pfFuncTime pfTime=NULL;
     pfProfInit pfFuncU0=NULL;
+    clock_t startt = clock();
+    clock_t endt = clock();
+    double etime = 0.;
 
 
     /* allocation de la structure */
-    psp=malloc(sizeof(*psp));
+    psp = (sParam *)malloc(sizeof(*psp));
 
     /* initialisation de la structure et des parametres */
-    fprintf(stdout,"***Parametres***\n");
+    fprintf(stdout,"***Parameters***\n");
     initParam(psp);
 
     /*choix des termes et de la methode de resolution */
-    fprintf(stdout,"***Choix des termes de l'equation***\n");
+    fprintf(stdout,"***physical terms***\n");
     fprintf(stdout,"1-Diffusion\n");
     fprintf(stdout,"2-Advection\n");
     fprintf(stdout,"3-Diffusion+Advection\n");
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
     case 3: pfOperator=advdif; break;
     default: break;
     }
-    fprintf(stdout,"***Choix de la methode de resolution***\n");
+    fprintf(stdout,"***time scheme***\n");
     fprintf(stdout,"1-Euler explicite\n");
     fprintf(stdout,"2-Euler implicite\n");
     fprintf(stdout,"3-Runge-Kutta 4\n");
@@ -54,15 +56,15 @@ int main(int argc, char **argv)
     }
 
 
-    fprintf(stdout,"***Choix du profil initial***\n");
+    fprintf(stdout,"***initial condition***\n");
     fprintf(stdout,"1-Sinus\n");
     fprintf(stdout,"2-Gaussienne\n");
-    fprintf(stdout,"3-Fonction porte\n");
+    fprintf(stdout,"3-Heaviside\n");
     choix=getInt();
 
     switch(choix)
     {
-    case 1: pfFuncU0=sinus; psp->sigma=1/((psp->dx)*(psp->Nx-3.));      break;
+    case 1: pfFuncU0=sinus; psp->sigma/=((psp->dx)*(psp->Nx-3.));      break;
     case 2: pfFuncU0=gaussienne;  break;
     case 3: pfFuncU0=porte;       break;
     default: break;
@@ -70,12 +72,12 @@ int main(int argc, char **argv)
 
 
     /* allocation memoire pour les tableaux */
-    Udiff = malloc(sizeof(*Udiff)*psp->Nx);
-    Uadv  = malloc(sizeof(*Uadv)*psp->Nx);
-    Un    = malloc(sizeof(*Un)*psp->Nx);
-    Unp1  = malloc(sizeof(*Unp1)*psp->Nx);
-    Utmp  = malloc(sizeof(*Utmp)*psp->Nx);
-    Xval  = malloc(sizeof(*Xval)*psp->Nx);
+    Udiff = (double *)malloc(sizeof(*Udiff)*psp->Nx);
+    Uadv  = (double *)malloc(sizeof(*Uadv)*psp->Nx);
+    Un    = (double *)malloc(sizeof(*Un)*psp->Nx);
+    Unp1  = (double *)malloc(sizeof(*Unp1)*psp->Nx);
+    Utmp  = (double *)malloc(sizeof(*Utmp)*psp->Nx);
+    Xval  = (double *)malloc(sizeof(*Xval)*psp->Nx);
 
     /* initialisation des valeurs de x et u0 */
     initProf(Xval,Un,psp,pfFuncU0);
@@ -97,7 +99,7 @@ int main(int argc, char **argv)
     file=fopen(cBuffer,"w+");
     fclose(file);
     writeProfil(cBuffer,Xval,Un,psp->Nx);
-
+    startt = clock();
     /* boucle en temps */
     for(i=0;i<psp->Npas;i+=psp->Nout)
     {
@@ -113,10 +115,14 @@ int main(int argc, char **argv)
         GenerateFileName("out_",cBuffer);
         writeProfil(cBuffer,Xval,Unp1,psp->Nx);
     }
+    endt = clock();
+    etime = (float)(endt - startt) / CLOCKS_PER_SEC;
+    printParam(psp);
+    fprintf(stdout, "Elapsed time %f s\n", etime);
 
     /* liberation de la memoire */
     freeParam(psp);
-    free(psp),psp=NULL;
+    free(psp)   ,psp=NULL;
     free(Xval)  ,Xval=NULL;
     free(Unp1)  ,Unp1=NULL;
     free(Un)    ,Un=NULL;
@@ -215,18 +221,37 @@ int initParam(psParam const psp)
     psp->dt=getDouble();
 
 
-    psp->du1   = malloc( sizeof(*psp->du1)  *psp->Nx);
-    psp->du2   = malloc( sizeof(*psp->du2)  *psp->Nx);
-    psp->du3   = malloc( sizeof(*psp->du3)  *psp->Nx);
-    psp->du4   = malloc( sizeof(*psp->du4)  *psp->Nx);
-    psp->Utmp  = malloc( sizeof(*psp->Utmp) *psp->Nx);
-    psp->Udiff = malloc( sizeof(*psp->Udiff)*psp->Nx);
-    psp->Uadv  = malloc( sizeof(*psp->Uadv) *psp->Nx);
-    psp->pdA   = malloc( sizeof(*psp->pdA)  *psp->Nx);
-    psp->pdB   = malloc( sizeof(*psp->pdB)  *psp->Nx);
-    psp->pdC   = malloc( sizeof(*psp->pdC)  *psp->Nx);
-    psp->pdGam = malloc( sizeof(*psp->pdGam)*psp->Nx);
-    psp->pdBet = malloc( sizeof(*psp->pdBet)*psp->Nx);
+    psp->du1   = (double *)malloc( sizeof(*psp->du1)  *psp->Nx);
+    psp->du2   = (double *)malloc( sizeof(*psp->du2)  *psp->Nx);
+    psp->du3   = (double *)malloc( sizeof(*psp->du3)  *psp->Nx);
+    psp->du4   = (double *)malloc( sizeof(*psp->du4)  *psp->Nx);
+    psp->Utmp  = (double *)malloc( sizeof(*psp->Utmp) *psp->Nx);
+    psp->Udiff = (double *)malloc( sizeof(*psp->Udiff)*psp->Nx);
+    psp->Uadv  = (double *)malloc( sizeof(*psp->Uadv) *psp->Nx);
+    psp->pdA   = (double *)malloc( sizeof(*psp->pdA)  *psp->Nx);
+    psp->pdB   = (double *)malloc( sizeof(*psp->pdB)  *psp->Nx);
+    psp->pdC   = (double *)malloc( sizeof(*psp->pdC)  *psp->Nx);
+    psp->pdGam = (double *)malloc( sizeof(*psp->pdGam)*psp->Nx);
+    psp->pdBet = (double *)malloc( sizeof(*psp->pdBet)*psp->Nx);
+    return 0;
+}
+
+
+
+/* demande de saisie des parametres utilisateurs */
+int printParam(psParam const psp)
+{
+    fprintf(stdout,"Nx= %d\n", psp->Nx);
+    fprintf(stdout,"Npas= %d\n", psp->Npas);
+    fprintf(stdout,"Nout= %d\n", psp->Nout);
+    fprintf(stdout,"C= %f\n", psp->C);
+    fprintf(stdout,"V= %f\n", psp->V);
+    fprintf(stdout,"A= %f\n", psp->A);
+    fprintf(stdout,"x0= %f\n", psp->x0);
+    fprintf(stdout,"sigma= %f\n", psp->sigma);
+    fprintf(stdout,"Dx= %f\n", psp->dx);
+    fprintf(stdout,"Dt= %f\n", psp->dt);
+
     return 0;
 }
 
@@ -608,6 +633,17 @@ double porte(const double x0, const double x, const double A, const double sigma
     double res=0.0;
 
     if ((x>(x0-sigma*0.5))&&(x<(x0+sigma*0.5)))
+        res=A;
+
+    return res;
+}
+
+
+double heavyside(const double x0, const double x, const double A, const double sigma)
+{
+    double res=0.0;
+
+    if (x>=(x0))
         res=A;
 
     return res;

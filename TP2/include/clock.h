@@ -1,7 +1,11 @@
 #ifdef _HANDCLOCK_
 #define __USE_BSD
 
+#ifdef __linux__
 #include <sys/time.h>
+#else
+#include <time.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 

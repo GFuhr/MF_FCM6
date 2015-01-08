@@ -397,11 +397,11 @@ int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const
 *\param iSizeX : taille du vecteur
 *\return : rien
 */
-static int invMat1D(pcnstField1D_cnst pfP, pcnstField1D pfInvP, pcnstField1D_cnst pMatA, pcnstField1D_cnst pGam, pcnstField1D_cnst pBet, long const iSizeX)
+static int invMat1D(pcnstField1D_cnst pfP, pcnstField1D pfInvP, pcnstField1D_cnst pMatA, pcnstField1D_cnst pGam, double const*const pBet, long const iSizeX)
 {
     static const char FCNAME[] = "invMat1D";
     int rbm_er = 0;
-    size_t k;
+    long k;
 
 
     pfInvP[1]=pfP[1]*pBet[1];
@@ -438,7 +438,7 @@ static int invMat1D(pcnstField1D_cnst pfP, pcnstField1D pfInvP, pcnstField1D_cns
 *\param iSizeX : taille du vecteur
 *\return : rien
 */
-static int invMat1DY(pcnstField1D_cnst pfP, pcnstField1D pfInvP, pcnstField1D_cnst pMatA, pcnstField1D_cnst pGam, pcnstField1D_cnst pBet,long const iPosX, long const iSizeY, long const iSizeX)
+static int invMat1DY(pcnstField1D_cnst pfP, pcnstField1D pfInvP, pcnstField1D_cnst pMatA, pcnstField1D_cnst pGam, double const*const  pBet,long const iPosX, long const iSizeY, long const iSizeX)
 {
     static const char FCNAME[] = "invMat1D";
     int rbm_er = 0;
