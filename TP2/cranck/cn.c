@@ -2,7 +2,7 @@
 #include "../include/H2D_Func.h"
 #include "../params/params.h"
 
-int cranck(double *const Up1, double const*const U, sConst const*const psc,pfLinearOp pfTimeStep, pfBC pfBoundary)
+int cranck(double *const Up1, double const*const U, sConst *const psc,pfLinearOp pfTimeStep, pfBC pfBoundary)
 {
     if (strcmp(discret,"real")==0)
     {
