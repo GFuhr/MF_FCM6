@@ -48,6 +48,9 @@ int initProf( double  *const x,  double *const u0,const sParam *const psp,  pfPr
 double sinus(const double, const double, const double, const double);
 double gaussienne(const double, const double, const double, const double);
 double porte(const double, const double, const double, const double);
+double heavyside(const double, const double, const double, const double);
+
+
 
 int initParam(psParam const psp);
 int freeParam(psParam const psp);

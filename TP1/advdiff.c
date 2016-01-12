@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     {
     case 1: pfFuncU0=sinus; psp->sigma/=((psp->dx)*(psp->Nx-3.));      break;
     case 2: pfFuncU0=gaussienne;  break;
-    case 3: pfFuncU0=porte;       break;
+    case 3: pfFuncU0=heavyside;       break;
     default: break;
     }
 
