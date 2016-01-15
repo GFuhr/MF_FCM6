@@ -1,5 +1,22 @@
 #include "../include/H2D.h"
 #include "../params/params.h"
+#include <time.h>
+
+static int printParam(sConst const*const psp);
+
+static int printParam(sConst const*const psp)
+{
+    fprintf(stdout,"Nx= %d\n", psp->sSize->iSize1);
+    fprintf(stdout,"Ny= %d\n", psp->sSize->iSize2);
+    fprintf(stdout,"Npas= %d\n", psp->Tmax);
+    fprintf(stdout,"Nout= %d\n", psp->TIO);
+    fprintf(stdout,"C= %f\n", psp->dEta);   
+    fprintf(stdout,"Dx= %f\n", psp->sSteps->dDx1);
+    fprintf(stdout,"Dy= %f\n", psp->sSteps->dDx2);
+    fprintf(stdout,"Dt= %f\n", psp->dDt);
+
+    return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -11,7 +28,10 @@ int main(int argc, char **argv)
     pfstep pfTimeStep=NULL;
     pfBC   pfBoundary=NULL;
     pfLinearOp pfRHS=NULL;
-
+    clock_t startt = clock();
+    clock_t endt = clock();
+    double etime = 0.;
+    
     /*initialisation of variables and profiles*/
     getParams(&sParams);
 
@@ -73,7 +93,7 @@ if (strcmp(_boundary,"null")==0)
         pfBoundary=null_bc;
     }
 
-
+    startt = clock();
     for(i=0;i<TpsEnd;i+=TpsIO)
     {
         for(j=0;j<TpsIO;j++)
@@ -93,7 +113,10 @@ if (strcmp(_boundary,"null")==0)
 
     /*IO*/
 
-
+    endt = clock();
+    etime = (float)(endt - startt) / CLOCKS_PER_SEC;
+    fprintf(stdout, "Elapsed time in H2D %f s\n", etime);
+    printParam(&sParams);   
 
 
 
