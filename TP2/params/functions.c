@@ -37,7 +37,7 @@ double  source(double const x, double const y, int const dComplex)
 
 /**
 *\fn double  FuncInit(double const x, double const y)
-*\brief 
+*\brief calcule la condition initiale implémentée dans H2D
 *\param  : 
 *\param  : 
 *\param  : 

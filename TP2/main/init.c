@@ -12,8 +12,8 @@ int getParams(sConst *const psc)
     psc->TIO = psc->Tmax/20;
     psc->dDt           = DT;
     psc->dEta          = C;
-    psc->sSize = MYLIB_MALLOC(sizeof(*psc->sSize));
-    psc->sSteps = MYLIB_MALLOC(sizeof(*psc->sSteps));
+    psc->sSize = (sFieldSize *)MYLIB_MALLOC(sizeof(*psc->sSize));
+    psc->sSteps = (sFieldDiscret *)MYLIB_MALLOC(sizeof(*psc->sSteps));
 
     psc->sSize->iSize1 = NX;
     psc->sSize->iSize2 = NY;
