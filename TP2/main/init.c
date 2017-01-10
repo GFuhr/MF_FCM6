@@ -57,7 +57,6 @@ int getParams(sConst *const psc)
         psc->pdMKy[i]=(double)i*psc->sSteps->dKx2;
     }
 
-
     calcMatInit(psc->pInit,psc->sSize,psc->sSteps);
     calcSourceInit(psc->pdSource,psc->sSize,psc->sSteps);
     if (strcmp(discret,"fourier")==0)
@@ -133,8 +132,6 @@ static int calcSourceInit(double *const pMatInit, sFieldSize const*const sFs, sF
                     y=(double)iy*sFd->dDx2;
                 }
                 pMatInit[ix+offset]=source(x,y, ic);
-
-
             }
         }
     }
@@ -152,8 +149,6 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
     file=fopen(cFileName,"w");
     if (format==_GPLOT)
     {
-
-
         for(z=0;z<sFs->iSizeC;z++)
         {
             for(y=0;y<sFs->iSize2;y++)
@@ -161,9 +156,8 @@ int writeProfil(const char *const cFileName, const double *const u, sFieldSize c
                 for(x=0;x<sFs->iSize1;x++)
                 {
                     long const pos = x +y*sFs->iSize1+z*sFs->iSize1*sFs->iSize2;
-                    fprintf(file,"%.12lf\t%.12lf\t%.12lf\n",(double)x,(double)(y+z*sFs->iSize1),u[pos]);
+                    fprintf(file,"%.12lf\t%.12lf\t%.12lf\n",(double)x,(double)(y),u[pos]);
                 }
-                /*fprintf(file,"\n");*/
             }
         }
     }
@@ -195,22 +189,15 @@ void freeParams(sConst *psc)
     freeSORStruct(psc->sSorMat);
     freeArray1D(psc->sSize);     
     freeArray1D(psc->sSteps);    
-
     freeArray1D(psc->pdSource);  
-
     freeArray1D(psc->pInit);     
-
     freeArray1D(psc->pdMKy);     
-
-
     freeArray1D(psc->pUrhs);
     freeArray1D(psc->pUtmp);
-
     freeArray1D(psc->pUk1);
     freeArray1D(psc->pUk2);
     freeArray1D(psc->pUk3);
     freeArray1D(psc->pUk4);
-
     freeArray1D(psc->sInvX);
     freeArray1D(psc->sInvY);
 }

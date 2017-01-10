@@ -14,11 +14,11 @@ extern "C" {
 #define NX 64
 #define NY 64
 #define DT 0.01
-#define ITER 80
+#define ITER 4096*8
 #define LX 128*M_PI
 #define LY 128*M_PI
-#define discret "real"
-#define scheme "eulis"
+#define discret "fourier"
+#define scheme "rk4"
 
 #define _boundary "other"
 
@@ -35,7 +35,7 @@ extern "C" {
  * */
 
 
-/* possible values for discret :
+/* possible values for _boundary :
  * "null"
  * "other"
  * */
