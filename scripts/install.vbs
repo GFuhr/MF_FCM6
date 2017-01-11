@@ -21,10 +21,10 @@ with bStrm
 end with
 
 ' install miniconda for python 3
-finalcmd = outputfolder &" /S /AddToPath=0 /NoRegistry=1"
+finalcmd = outputfolder &" /S /AddToPath=1 /NoRegistry=1"
 Set oShell = WScript.CreateObject ("WScript.Shell")
-oShell.run(finalcmd, 1, True)
-oShell.run(condacmd&packagesinstall, 1, True)
+oShell.run finalcmd, 1, True
+oShell.run condacmd&packagesinstall, 1, True
 
 ' ipython default imports
 ipythonstartup = homepath &"\.ipython\profile_default\startup"
@@ -38,4 +38,16 @@ objFile.Close
 pythoncmd = installfolder & "python.exe"
 jupyterpath = installfolder & "pkgs\qtconsole-4.2.1-py35_2\Scripts\"
 jupytercmd = jupyterpath & "jupyter-qtconsole-script.py"
-oShell.run(pythoncmd & " " & jupytercmd, 1, False)
+'oShell.run pythoncmd & " " & jupytercmd, 1, False
+
+WshShell = CreateObject("Wscript.shell")
+strDesktop = WshShell.SpecialFolders("Desktop")
+oMyShortcut = WshShell.CreateShortcut(strDesktop + "\Spyder.lnk")
+oMyShortcut.WindowStyle = 3  &&Maximized 7=Minimized  4=Normal 
+oMyShortcut.TargetPath = spydercmd
+oMyShortCut.Save
+
+' run spyder afterwards
+pythonscript = installfolder & "Scripts\"
+spydercmd = pythonscript & "spyder.exe"
+oShell.run spydercmd, 1, False
