@@ -98,15 +98,15 @@ class h2Dloader(object):
 
 if __name__ == '__main__':
     import os
-    os.chdir(u'F:\Hubic\git_repos_codes\M2_FCM6\TP2')
+    os.chdir(r'../TP2')
 
     #data in fourier format
     data = h2Dloader('H2D_OCT_0430.dat')
     data.convertreal()
     data.plot()
     data.plotmodes()
-    print data.max()
-    print data.min()
+    print(data.max())
+    print(data.min())
     #data in real format
     data = h2Dloader('H2D_OCT_0190.dat')
     data.plot()

@@ -57,7 +57,7 @@ int  mallocInvLapStruct(sInvLap *sLap, sFieldSize const*const sFs)
 
 int  mallocSORStruct(sSOR *sLap, sFieldSize const*const sFs)
 {
-    static const char FCNAME[] = "mallocInvLapStruct";
+    static const char FCNAME[] = "mallocSORStruct";
     int rbm_er = 0;
 
     sLap->vecA = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecA)));

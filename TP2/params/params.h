@@ -1,6 +1,6 @@
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 #ifndef H2D_PARAMS_H
 #define H2D_PARAMS_H
@@ -14,10 +14,10 @@ extern "C" {
 #define NX 64
 #define NY 64
 #define DT 0.01
-#define ITER 4096*8
+#define ITER 4096*128
 #define LX 128*M_PI
 #define LY 128*M_PI
-#define discret "fourier"
+#define discret "real"
 #define scheme "rk4"
 
 #define _boundary "other"
@@ -43,4 +43,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
