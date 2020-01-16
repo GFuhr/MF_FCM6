@@ -1,4 +1,14 @@
 .gitignore.good
+*.pyc
+
+#jupyter checkpoint
+python/.ipynb_checkpoints/
+
+#python cache folders
+python/advdiff/__pycache__/
+python/h2d/__pycache__/
+python/utils/__pycache__/
+
 #visual studio configuration files
 C/TP2/H2D/*
 C/TP2/scripts
