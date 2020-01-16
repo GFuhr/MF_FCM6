@@ -1,19 +1,19 @@
-#!/usr/bin/env python
+    #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = 'Guillaume Fuhr'
 import sys
 import os
-
-sys.path.append(os.path.normpath(os.path.join(os.path.realpath(__file__), '../..')))
-
 import setuptools
-import pyximport #pyximport.install()
+import pyximport
 import matplotlib
-
 import numpy as np
-from matplotlib import animation
 import matplotlib.pyplot as plt
-pyximport.install(setup_args = {'include_dirs': np.get_include()})
+
+sys.path.append(os.path.normpath(
+                                 os.path.join(os.path.realpath(__file__), '../..')
+                                 )
+                )
+pyximport.install(setup_args={'include_dirs': np.get_include()})
 matplotlib.use('Qt5Agg')
 
 try:
@@ -23,13 +23,17 @@ except ModuleNotFoundError:
 
 from utils.timer import Timer
 from utils.plotting import figformat, animated_plot_1d
-import matrix
-import operators_1d as operators
-
+try:
+    import matrix
+    import operators_1d as operators
+except ModuleNotFoundError:
+    import advdiff.matrix
+    import advdiff.operators_1d as operators
 
 
 # normalized figures output adapted for better reading in articles/reports
 figformat().apply()
+
 
 # parameters
 def simulate(**kwargs):
@@ -48,9 +52,7 @@ def simulate(**kwargs):
 
     Field_p_init = initfield_1D(X)
 
-
-
-    #RK Fields
+    # RK Fields
     k1 = np.zeros(Nx)
     k2 = np.zeros(Nx)
     k3 = np.zeros(Nx)
@@ -74,7 +76,7 @@ def simulate(**kwargs):
 
     Field_p = Field_p_init.copy()
     Frames = []
-    Frames.append(Field_p)
+    Frames.append(Field_p_init.copy())
 
     # generate matrix for implicit part I + Vdu/dx - C d2u/dx2
     scheme = global_params['scheme']
@@ -90,7 +92,7 @@ def simulate(**kwargs):
 
     iterations = 0
     with Timer() as tf:
-        while(t<Tmax):
+        while (t < Tmax):
             # uncomment line depending on choosen scheme
             if global_params['scheme'] == 'eule':
                 operators.eule(k1, Field_p, **global_params)
@@ -99,7 +101,9 @@ def simulate(**kwargs):
             elif global_params['scheme'] == 'RK2':
                 operators.RK2(k1, k2, y1, Field_p, **global_params)
             elif global_params['scheme'] == 'RK4':
-                operators.RK4(k1, k2, k3, k4, y1, y2, y3, Field_p, **global_params)
+                operators.RK4(k1, k2, k3, k4,
+                              y1, y2, y3,
+                              Field_p, **global_params)
             elif global_params['scheme'] == 'CN':
                 operators.CranckN(Mat, k1, Field_p, **global_params)
             else:
@@ -113,8 +117,12 @@ def simulate(**kwargs):
             iterations += 1
     print('total execution time in µs : {0}'.format(tf.interval))
     print('number of snapshots : {0}'.format(len(Frames)))
-    print('used time for 1 time step : {0:.2f} µs'.format(tf.interval/iterations))
+    print('used time for 1 time step : {0:.2f} µs'.format(
+                                                     tf.interval/iterations
+                                                     )
+          )
     return Frames
+
 
 if __name__ == '__main__':
     # get all output in a list of numpy array

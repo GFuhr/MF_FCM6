@@ -38,7 +38,7 @@ Toutput = 10*dt
 C = 1.8
 
 # advection coefficient
-V = -.6
+V = 0.
 
 # time scheme
 # can be
