@@ -16,7 +16,11 @@ import matplotlib.pyplot as plt
 pyximport.install(setup_args = {'include_dirs': np.get_include()})
 matplotlib.use('Qt5Agg')
 
-from parameters import load_params, initfield_1D
+try:
+    from parameters import load_params, initfield_1D
+except ModuleNotFoundError:
+    from advdiff.parameters import load_params, initfield_1D
+
 from utils.timer import Timer
 from utils.plotting import figformat, animated_plot_1d
 import matrix

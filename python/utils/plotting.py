@@ -97,7 +97,7 @@ def animated_plot_1d(Frames):
     anim_length = min(idx, len(Frames)-1 )
     anim = animation.FuncAnimation(fig, update_line, fargs=(Frames, l),
                                    frames=anim_length,  blit=True)
-    plt.close(fig)
+    #plt.close(fig)
     return anim
 
 
