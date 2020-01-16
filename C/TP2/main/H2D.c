@@ -118,8 +118,6 @@ if (strcmp(_boundary,"null")==0)
     fprintf(stdout, "Elapsed time in H2D %f s\n", etime);
     printParam(&sParams);   
 
-
-
     /*garbage collector*/
     freeArray1D(Un);
     freeArray1D(Unp1);

@@ -10,7 +10,7 @@ tempFolder = environmentVars("TEMP")
 installfolder = homepath &"\Miniconda3\"
 
 condacmd = installfolder & "Scripts\conda"
-packagesinstall = " install -y numpy matplotlib spyder jupyter"
+packagesinstall = " install -y numpy matplotlib spyder jupyter cython"
 
 'check if Miniconda already exist
 exists = oFso.FolderExists(installfolder)
@@ -34,11 +34,23 @@ if NOT (exists) then
     oShell.run condacmd&packagesinstall, 1, True
 end if
 
+
+' install python 3.6.5
+pythonupdate = installfolder & "Scripts\" & "conda install -y python=3.6.5"
+oShell.run pythonupdate, 1, True
+
+' freeze python version to version 3.6
+pinnedfile = installfolder &"\conda-meta\pinned"
+Set objFile = oFso.CreateTextFile(pinnedfile,True)
+objFile.Write "python 3.6.*" & vbCrLf
+objFile.Close
+
+
 ' ipython default imports
 ipythonstartup = homepath &"\.ipython\profile_default\startup"
 outFile = ipythonstartup&"00-imports.py"
 Set objFile = oFso.CreateTextFile(outFile,True)
-objFile.Write "import numpy as np; import matplotlib.pyplot as plt; from os import getcwd, chdir" & vbCrLf
+objFile.Write "import numpy as np; import matplotlib.pyplot as plt; from os import getcwd, chdir; import cython" & vbCrLf
 objFile.Close
 
 ' launch jupyter

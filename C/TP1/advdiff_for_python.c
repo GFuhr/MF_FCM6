@@ -195,6 +195,32 @@ double getDouble(void)
     return nombre;
 }
 
+int initfromarray(psParam const psp, double const*const dInputs)
+{
+    
+    psp->Nx=int(dInputs[0]);
+    //fprintf(stdout,"Npas=?");
+    psp->Npas=int(dInputs[1])
+    fprintf(stdout,"Nout=?");
+    psp->Nout=int(dInputs[2]);
+    fprintf(stdout,"C=?");
+    psp->C=dInputs[3];
+    fprintf(stdout,"V=?");
+    psp->V=dInputs[4];
+    fprintf(stdout,"A=?");
+    psp->A=dInputs[5];
+    fprintf(stdout,"x0=?");
+    psp->x0=dInputs[6];
+    fprintf(stdout,"sigma=?");
+    psp->sigma=dInputs[7];
+    fprintf(stdout,"Dx=?");
+    psp->dx=dInputs[8];
+    fprintf(stdout,"Dt=?");
+    psp->dt=dInputs[9];
+
+    return 0;
+}
+
 
 /* demande de saisie des parametres utilisateurs */
 int initParam(psParam const psp)

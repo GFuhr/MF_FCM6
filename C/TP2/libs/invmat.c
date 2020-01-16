@@ -70,10 +70,10 @@ int  mallocSORStruct(sSOR *sLap, sFieldSize const*const sFs)
     sLap->vecC = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
     if (sLap->vecC == NULL)
     {            rbm_er=1;        }
-    sLap->vecD = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
+    sLap->vecD = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecD)));
     if (sLap->vecD == NULL)
     {            rbm_er=1;        }
-    sLap->vecE = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecC)));
+    sLap->vecE = allocArray1D(sFs->iSize2*sFs->iSize1,sizeof(*(sLap->vecE)));
     if (sLap->vecE == NULL)
     {            rbm_er=1;        }
 
@@ -83,7 +83,7 @@ int  mallocSORStruct(sSOR *sLap, sFieldSize const*const sFs)
 
 int  freeSORStruct(sSOR * sIL)
 {
-    static const char FCNAME[] = "freeInvLapStruct";
+    static const char FCNAME[] = "freeSORStruct";
     int rbm_er = 0;
 
     freeArray1D(sIL->vecA),sIL->vecA=NULL;
@@ -300,7 +300,7 @@ int initInvLapStructY(sInvLap * sIL, sFieldSize const *const sFs, double const d
 *\param pfP : champ qu'on veut 'inverser'
 *\param pfInvP : champ qui va contenir le laplacien inverse
 *\param sFs : taille du champ
-*\param sIL : éléments de la matrice A necessaires pour le calcul
+*\param sIL : Ã©lÃ©ments de la matrice A necessaires pour le calcul
 *\return : rien
 */
 int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const sFs, sInvLap * sIL)
@@ -475,11 +475,6 @@ static void cyclic(double const*const pField, double *const pFieldInv,sFieldSize
     long x=0;
 
 
-    /*     gamma = -b[1];                          *//*Avoid subtraction error in forming bb[0].*/
-    /*     bb[1]=b[1]-gamma;                       *//*Set up the diagonal of the modified tridi*/
-    /*     bb[n-2]=b[n-2]-alpha*beta/gamma;        *//*agonal system.*/
-    /*         for (i=2;i<n-2;i++) bb[i]=b[i];*/
-    /*tridag(a,bb,c,res,pFieldInv);*/                     /*Solve A * x = r.*/
     for(x=1;x<sFs->iSize1-1;x++)
     {
         invMat1DY(pField,pFieldInv,sIL->a,sIL->gam,sIL->bet,x,sFs->iSize2,sFs->iSize1);

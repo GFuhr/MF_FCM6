@@ -1,5 +1,6 @@
 .gitignore.good
 *.pyc
+*.npy
 
 #jupyter checkpoint
 python/.ipynb_checkpoints/
