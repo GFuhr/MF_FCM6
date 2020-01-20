@@ -1,3 +1,4 @@
+from types import ModuleType
 from numpy import pi
 import numpy as np
 
@@ -104,6 +105,8 @@ def load_params(**kwargs):
     lvars = dict(globals())
     for k, v in lvars.items():
         # check if variable is not internal variable
+        if isinstance(v, ModuleType):
+            continue
         if not k.startswith('_'):
             # check if it's not a function
             if not hasattr(v, '__call__'):

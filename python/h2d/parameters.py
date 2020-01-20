@@ -1,3 +1,4 @@
+from types import ModuleType
 from numpy import pi
 import numpy as np
 
@@ -7,7 +8,7 @@ import numpy as np
 # other variables (but not functions) can e inserted and will be added automatically
 
 # time step
-dt = .02
+dt = .001
 
 # x step
 dx = .4
@@ -25,14 +26,14 @@ Ny = 128
 Nm = 128
 
 # wave number in Y direction
-ky = pi/(Ny*dy)
+ky = 2*pi/(Ny*dy)
 
 
 # end time
-Tmax = 10000*dt
+Tmax = 100000*dt
 
 # output time
-Toutput = 10*dt
+Toutput = 100*dt
 
 # diffusion coefficient
 C = 1.8
@@ -104,6 +105,8 @@ def load_params(**kwargs):
     lvars = dict(globals())
     for k, v in lvars.items():
         # check if variable is not internal variable
+        if isinstance(v, ModuleType):
+            continue
         if not k.startswith('_'):
             # check if it's not a function
             if not hasattr(v, '__call__'):

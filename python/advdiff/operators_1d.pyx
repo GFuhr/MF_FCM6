@@ -8,8 +8,12 @@ from cython.parallel import prange, parallel
 import matrix
 cimport matrix
 
+import os
+
 DTYPE = np.double
 ctypedef np.double_t DTYPE_t
+
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)

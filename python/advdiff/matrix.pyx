@@ -1,3 +1,6 @@
+#!python
+#cython: language_level=3
+
 import numpy as np
 import cython
 cimport numpy as np
