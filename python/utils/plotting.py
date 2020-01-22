@@ -1,7 +1,17 @@
+import matplotlib
+
+matplotlib.use('Qt5Agg')
+
 import matplotlib.pyplot as plt
 from matplotlib import animation
-from IPython.display import HTML
+from mpl_toolkits import mplot3d
+try:
+    from IPython.display import HTML
+    HAS_HTML = True
+except ModuleNotFoundError:
+    HAS_HTML = False
 from numpy import linspace as nplinspace
+import numpy as np
 import matplotlib
 
 matplotlib.use('Qt5Agg')
@@ -57,6 +67,22 @@ def plot_profile(frames, idx, save=False):
         plt.savefig('{0}{1}.png'.format("fig_", 0), format='png')
 
 
+def plot_2d_profile(frames, idx, save=False):
+    figformat().apply()
+    grid_size = frames[idx].shape
+    plt.figure(figsize=(10, 10))
+    ax = plt.axes(projection='3d')
+    X = np.arange(0, grid_size[1])
+    Y = np.arange(0, grid_size[0])
+    X, Y = np.meshgrid(X, Y)
+    ax.plot_surface(X[1:-1, 1:-1], Y[1:-1, 1:-1], frames[idx][1:-1, 1:-1], linewidth=0, antialiased=False)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    plt.grid(True)
+    if save:
+        plt.savefig('{0}{1}.png'.format("fig_", 0), format='png')
+
+
 def animated_plot_1d(Frames):
     """
      create animation from simulation outputs
@@ -66,7 +92,7 @@ def animated_plot_1d(Frames):
     Nx = Frames[0].shape[0]
     X = nplinspace(0, Nx - 1, num=Nx)
 
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111)
     line, = ax.plot([], [], lw=4)
     ax.set_xlim([X.min(), X.max()])
@@ -97,7 +123,7 @@ def animated_plot_1d(Frames):
 
 
 def animated_plot_2d(Frames):
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 10))
     plt.title('time evolution')
     ax = plt.axes(label='2D plot')
     PCM = ax.pcolorfast(0*Frames[0], vmin=0, vmax=1, cmap='seismic')
@@ -126,8 +152,21 @@ def plot_results(output, save=False, filename=None):
         on windows is through conda :
         conda -c conda-forge install ffmpeg
     """
-    anim = animated_plot_1d(output)
+
+    dims = len(output[0].shape)
+    if dims == 1:
+        anim = animated_plot_1d(output)
+    else:
+        anim = animated_plot_2d(output)
+
     if save:
         savefile = filename or "movie.mp4"
         anim.save(savefile, fps=24)
-    return HTML(anim.to_html5_video())
+    if HAS_HTML:
+        return HTML(anim.to_html5_video())
+    else:
+        return anim
+
+
+if __name__ == '__main__':
+    pass

@@ -10,20 +10,26 @@ import numpy as np
 # time step
 dt = .001
 
-# x step
-dx = .4
-
-# y step (used only for H2D simulations)
-dy = .4
-
 # Points in X direction
-Nx = 128
+Nx = 32
 
 # Points in Y direction
-Ny = 128
+Ny = 32
+
+# x step
+dx = 2*pi/Nx
+
+# y step (used only for H2D simulations)
+dy = 2*pi/Ny
+
+# Points in X direction
+Nx = 32
+
+# Points in Y direction
+Ny = 32
 
 # modes in Y direction
-Nm = 128
+Nm = 32
 
 # wave number in Y direction
 ky = 2*pi/(Ny*dy)
@@ -36,10 +42,10 @@ Tmax = 100000*dt
 Toutput = 100*dt
 
 # diffusion coefficient
-C = 1.8
+C = .18
 
 # advection coefficient
-V = -2
+V = 0
 
 # time scheme
 # can be
@@ -83,13 +89,14 @@ def initfield_2D(x: np.array, y: np.array):
     _dx = x[1] - x[0]
     _dy = y[1] - y[0]
     u0 = np.sin(x/x.max()+y/y.max())
+    u0 = np.sin(x / 2)*np.sin( y / 2)
 
     # exemple for gate
-    u0[:, :] = 1
-    u0[0:u0.shape[0]//4, :] = 0
-    u0[3*u0.shape[0]//4:-1, :] = 0
-    u0[:, 0:u0.shape[1]//4] = 0
-    u0[:, 3*u0.shape[1]//4:-1] = 0
+    # u0[:, :] = 1
+    # u0[0:u0.shape[0]//4, :] = 0
+    # u0[3*u0.shape[0]//4:-1, :] = 0
+    # u0[:, 0:u0.shape[1]//4] = 0
+    # u0[:, 3*u0.shape[1]//4:-1] = 0
     return u0
 
 

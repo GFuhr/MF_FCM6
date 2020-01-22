@@ -57,23 +57,47 @@ cdef advection(double dx, double dy, double V, \
 @cython.wraparound(False)
 cdef boundary(
     np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] u):
-    cdef int Nx = u.shape[1]-1
-    cdef int Ny = u.shape[0]-1
+    cdef int Nx = u.shape[1]
+    cdef int Ny = u.shape[0]
     cdef int iy , ix
 
     # y boundary
-    for ix in range(1, Nx-1):
-        # u[0, ix] = -u[2, ix]
-        # u[Ny, ix] = -u[Ny-2, ix]
-        u[0, ix] = u[Ny-1, ix]
-        u[Ny, ix] = u[1, ix]
-        #u[0, ix] = 2.
+    for ix in range(0, Nx):
+        u[0, ix] = u[Ny-2, ix]
+        u[Ny-1, ix] = u[1, ix]
+        #u[0, ix] = -u[2, ix]
+        #u[Ny-1, ix] = -u[Ny-3, ix]
 
     # x boundary
     for iy in range(0, Ny):
         u[iy, 0] = -u[iy, 2]
-        u[iy, Nx] = -u[iy, Nx-2]
+        u[iy, Nx-1] = -u[iy, Nx-3]
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef null_bc(
+    np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] u):
+    """
+    function to define to implement the null boundary condition
+    :param u: 
+    :return: 
+    """
+    cdef int Nx = u.shape[1]
+    cdef int Ny = u.shape[0]
+    cdef int iy , ix
+
+    # y boundary
+    for ix in range(0, Nx):
+        # u[0, ix] = -u[2, ix]
+        # u[Ny, ix] = -u[Ny-2, ix]
+        u[0, ix] = -u[2, ix]
+        u[Ny-1, ix] = -u[Ny-3, ix]
+
+    # x boundary
+    for iy in range(0, Ny):
+        u[iy, 0] = -u[iy, 2]
+        u[iy, Nx-1] = -u[iy, Nx-3]
 
 
 
@@ -115,7 +139,11 @@ def eule(
         for idx_y in prange(1, m):
             for idx_x in range(1, n):
                 un[idx_y, idx_x] += dt*rhs[idx_y, idx_x]
-    boundary(un)
+
+    if kwargs.get('boundary', "default").find("default")>-1:
+        boundary(un)
+    else:
+        null_bc(un)
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -136,7 +164,11 @@ def euli(matrix.linearmatrix2D matA, \
         for idx_y in prange(1, m):
             for idx_x in range(1, n):
                 Field_p[idx_y, idx_x] = pp1[idx_y, idx_x]
-    boundary(Field_p)
+
+    if kwargs.get('boundary', "default").find("default")>-1:
+        boundary(Field_p)
+    else:
+        null_bc(Field_p)
 
 
 @cython.boundscheck(False)
@@ -156,7 +188,11 @@ def RK_step(
         for idx_y in prange(1, m):
             for idx_x in range(1, n):
                 yi[idx_y, idx_x] = un[idx_y, idx_x] + gamma*ki[idx_y, idx_x]
-    boundary(yi)
+
+    if kwargs.get('boundary', "default").find("default")>-1:
+        boundary(yi)
+    else:
+        null_bc(yi)
 
 
 @cython.boundscheck(False)

@@ -5,8 +5,11 @@ import cython
 cimport numpy as np
 cimport cython
 from cython.parallel import prange, parallel
-import matrix
-cimport matrix
+import os
+import pyximport
+pyximport.install(setup_args={"include_dirs": [np.get_include(), os.path.abspath(__file__)]})
+#import matrix
+from matrix cimport linearmatrix
 
 import os
 
@@ -115,7 +118,7 @@ def eule(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def euli(matrix.linearmatrix matA, \
+def euli(linearmatrix matA, \
     np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] pp1, \
     np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] Field_p, **kwargs):
 
@@ -129,7 +132,7 @@ def euli(matrix.linearmatrix matA, \
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def CranckN(matrix.linearmatrix matA, \
+def CranckN(linearmatrix matA, \
     np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] rhs, \
     np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] Field_p, **kwargs):
 

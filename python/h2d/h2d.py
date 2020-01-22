@@ -7,7 +7,7 @@ import pyximport
 import numpy as np
 import matplotlib.pyplot as plt
 
-from parameters import load_params, initfield_2D
+
 
 try:
     from utils.timer import Timer
@@ -17,6 +17,7 @@ except ModuleNotFoundError:
     from utils.timer import Timer
     from utils.plotting import figformat, animated_plot_2d
 
+from parameters import load_params, initfield_2D
 from utils.file import get_run_number, save_outputs
 pyximport.install(setup_args={"include_dirs": np.get_include()})
 
@@ -30,7 +31,7 @@ from matrix import linearmatrix2D
 figformat().apply()
 
 
-def simulate(verbose=False, save_files=False, **kwargs):
+def simulate(verbose=False, save_files=False, init=None,  **kwargs):
     """
 
     :param verbose:
@@ -65,7 +66,10 @@ def simulate(verbose=False, save_files=False, **kwargs):
     # init fields and constants
     Y, X = np.meshgrid(dx * np.linspace(0, Nx, num=Nx), dy * np.linspace(0, Ny, num=Ny))
 
-    Field_p = initfield_2D(X, Y)
+    if init is None:
+        Field_p = initfield_2D(X, Y)
+    else:
+        Field_p = init(X, Y)
 
     if verbose:
         print("stability numbers : ")

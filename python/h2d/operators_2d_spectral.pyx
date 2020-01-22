@@ -53,12 +53,12 @@ cdef advection_spectral(double dx, double ky, double V, \
 @cython.wraparound(False)
 cdef boundary(
     np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] u):
-    cdef int Nx = u.shape[1]-1
+    cdef int Nx = u.shape[1]
     cdef int Ny = u.shape[0]
     cdef int m
     for m in range(0, Ny):
         u[m, 0] = u[m, 2]
-        u[m, Nx] = u[m, Nx-2]
+        u[m, Nx-1] = u[m, Nx-3]
 
 
 @cython.boundscheck(False)

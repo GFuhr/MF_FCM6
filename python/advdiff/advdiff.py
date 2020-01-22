@@ -34,7 +34,6 @@ except ModuleNotFoundError:
 # normalized figures output adapted for better reading in articles/reports
 figformat().apply()
 
-
 # parameters
 def simulate(verbose=False, save_files=False, **kwargs):
     """
@@ -71,9 +70,10 @@ def simulate(verbose=False, save_files=False, **kwargs):
     Mat = matrix.linearmatrix(Nx)
 
     # init fields and constants
-    print("stability numbers : ")
-    print("advection : {0}".format(np.abs(V) * dt / dx))
-    print("diffusion : {0}".format(C * dt / dx ** 2))
+    if verbose:
+        print("stability numbers : ")
+        print("advection : {0}".format(np.abs(V) * dt / dx))
+        print("diffusion : {0}".format(C * dt / dx ** 2))
 
     t = 0
     tlast = 0
