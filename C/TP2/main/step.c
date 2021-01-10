@@ -64,8 +64,8 @@ static int stepDiff_real_x(double *const pp1,double const*const p,  sConst const
         for(x=1;x<psc->sSize->iSize1-1;x++)
         {
             long const posxy   = x+y*psc->sSize->iSize1;
-            long const posxyp1= x+(y+1)*psc->sSize->iSize1;
-            long const posxym1= x+(y-1)*psc->sSize->iSize1;
+            long const posxyp1= x+1+y*psc->sSize->iSize1;
+            long const posxym1= x-1+y*psc->sSize->iSize1;
             pp1[posxy]=psc->pdSource[posxy]+dEtaFacDx*(p[posxy+1]+p[posxy-1]-2.*p[posxy]);
         }
     }
@@ -147,7 +147,7 @@ void copyandmultfields(double *const pp1,double const*const p, double const dFac
 
 }
 
-/*calcul de S[y][x]+D2/Dx2(p[y][x])+D2/Dy2(p[y][x]) */
+/* pp1[y][x] = 0 */
 int cleanfields(double *const pp1,double const*const p,double const*const  rhs, double const dFactor, sFieldSize const*const sFs)
 {
     long y=0;

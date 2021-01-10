@@ -60,13 +60,15 @@ int main(int argc, char **argv)
     fprintf(stdout,"1-Sinus\n");
     fprintf(stdout,"2-Gaussienne\n");
     fprintf(stdout,"3-Heaviside\n");
+    fprintf(stdout,"4-Gate\n");
     choix=getInt();
 
     switch(choix)
     {
-    case 1: pfFuncU0=sinus; psp->sigma/=((psp->dx)*(psp->Nx-3.));      break;
-    case 2: pfFuncU0=gaussienne;  break;
-    case 3: pfFuncU0=heavyside;       break;
+    case 1: pfFuncU0=sinus; psp->sigma/=((psp->dx)*(psp->Nx-3.)); break;
+    case 2: pfFuncU0=gaussienne; break;
+    case 3: pfFuncU0=heavyside; break;
+    case 4: pfFuncU0=gate; break;
     default: break;
     }
 
@@ -659,6 +661,17 @@ double heavyside(const double x0, const double x, const double A, const double s
     double res=0.0;
 
     if (x>=(x0))
+        res=A;
+
+    return res;
+}
+
+
+double gate(const double x0, const double x, const double A, const double sigma)
+{
+    double res=0.0;
+
+    if (x>=(x0-sigma)||(x<=(x0+sigma)))
         res=A;
 
     return res;

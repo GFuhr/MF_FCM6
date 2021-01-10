@@ -4,7 +4,7 @@ __author__ = "Guillaume Fuhr"
 import numpy as np
 
 
-# function extracting the max value and his position for each serie of a list of profiles
+# function extracting the max value and his position for each entry in a list of profiles
 def _extract_max_1D(Frames):
     list_max = np.zeros(shape=(2, len(Frames)))
     idx = 0

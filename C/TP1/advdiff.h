@@ -49,13 +49,11 @@ double sinus(const double, const double, const double, const double);
 double gaussienne(const double, const double, const double, const double);
 double porte(const double, const double, const double, const double);
 double heavyside(const double, const double, const double, const double);
-
-
+double gate(const double, const double, const double, const double);
 
 int initParam(psParam const psp);
 int freeParam(psParam const psp);
 int printParam(psParam const psp);
-
 
 int swapFields(double **f1,double **f2);
 
@@ -66,7 +64,6 @@ int addField2(const double *const f1, const double *const f2, double *const fres
 int resol_RK4   (const double *const x, const double *const un,  double *const unp1,const sParam *const psp, pfFuncOp pfop);
 int resol_Euler (const double *const x, const double *const un,  double *const unp1,const sParam *const psp, pfFuncOp pfop);
 int resol_EulerI(const double *const x, const double *const un,  double *const unp1,const sParam *const psp, pfFuncOp pfop);
-
 
 /*saisies utilisateurs */
 int getInt(void);

@@ -79,7 +79,7 @@ cdef class linearmatrix(object):
         for k in range(2, iSizeX-1):
             inv[k] = (rhs[k]-self.tridiag_a[k]*inv[k-1])*self.tridiag_bet[k]
         for k in range(iSizeX-2, 0, -1):
-            inv[k] -= self.tridiag_gam[k+1]*rhs[k+1]
+            inv[k] -= self.tridiag_gam[k+1]*inv[k+1]
 
 
     def add_diffusion(self, double C, double dx):
@@ -273,7 +273,7 @@ def invMat1D(np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] rhs,
     for k in range(2, iSizeX-1):
         inv[k] = (rhs[k]-a[k]*inv[k-1])*pBet[k]
     for k in range(iSizeX-2, 0, -1):
-        inv[k] -= pGam[k+1]*rhs[k+1]
+        inv[k] -= pGam[k+1]*inv[k+1]
 
 
 def initInvMat1D(np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] a,
