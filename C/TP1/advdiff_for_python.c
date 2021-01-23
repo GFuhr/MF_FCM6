@@ -562,7 +562,7 @@ int invMat1D(const double *const pSrc, double *const pDest, const unsigned int i
         pDest[k]=(pSrc[k]-a[k]*pDest[k-1])*pBet[k];
 
     for(k=(iSizeX-2);k>=1;k--)
-        pDest[k]-=pGam[k+1]*pSrc[k+1];
+        pDest[k]-=pGam[k+1]*pDest[k+1];
 
     return 0;
 }

@@ -315,13 +315,6 @@ int invMat(double const*const pfP, double *const pfInvP, sFieldSize const *const
     if ((sIL->dir==_XF))
     {
         pcnstField1D_cnst a=sIL->a;
-#ifdef RBM_USE_OMP
-#if (defined(__GNUC__) && !defined(__ICC))
-#pragma omp parallel for private(i,j,k) 
-#else
-#pragma omp parallel for private(i,j,k) 
-#endif
-#endif
 
         for(j=0;j<iLenY;j++)
         {

@@ -161,9 +161,12 @@ def plot_results(output, save=False, filename=None):
     if save:
         savefile = filename or "movie.mp4"
         anim.save(savefile, fps=24)
-    if HAS_HTML:
-        return HTML(anim.to_html5_video())
-    else:
+    try:
+        if HAS_HTML:
+            return HTML(anim.to_html5_video())
+        else:
+            return anim
+    except RuntimeError:
         return anim
 
 

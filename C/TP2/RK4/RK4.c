@@ -1,4 +1,3 @@
-#include "../include/H2D_Func.h"
 #include "../include/schemes.h"
 #include "../include/H2D_types.h"
 
