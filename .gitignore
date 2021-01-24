@@ -1,6 +1,9 @@
 .gitignore.good
 *.pyc
 *.npy
+.coverage 
+Untitled.ipynb
+untitled.ipynb
 
 #jupyter checkpoint
 python/.ipynb_checkpoints/
