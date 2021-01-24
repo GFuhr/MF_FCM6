@@ -9,6 +9,12 @@ python/.ipynb_checkpoints/
 python/advdiff/__pycache__/
 python/h2d/__pycache__/
 python/utils/__pycache__/
+python/.idea/
+python/run/
+
+
+# test run files
+python/*.txt
 
 #visual studio configuration files
 C/TP2/H2D/*
