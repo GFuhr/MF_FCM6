@@ -11,7 +11,9 @@ import matplotlib.pyplot as plt
 
 sys.path.append(os.path.normpath(os.path.join(os.path.realpath(__file__), "../..")))
 pyximport.install(setup_args={"include_dirs": np.get_include()})
-matplotlib.use("Qt5Agg")
+
+# use default backend 
+# matplotlib.use("Qt5Agg")
 
 
 try:
