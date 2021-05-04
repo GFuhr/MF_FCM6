@@ -13,7 +13,8 @@ from numpy import linspace as nplinspace
 import numpy as np
 import matplotlib
 
-matplotlib.use('Qt5Agg')
+# use default backend
+# matplotlib.use('Qt5Agg')
 
 
 class figformat(object):
