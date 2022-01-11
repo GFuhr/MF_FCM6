@@ -9,16 +9,16 @@ cdef class linearmatrix(object):
     cdef int isinit
     cdef tuple shape
 
-cdef class linearmatrix2D(object):
-    cdef int size
-    cdef int size_x
-    cdef int size_y
-    cdef double[:] vec_a
-    cdef double[:] vec_b
-    cdef double[:] vec_c
-    cdef double[:] vec_d
-    cdef double[:] vec_e
-    cdef double rsor
-
-    cdef int isinit
-    cdef tuple shape
+# cdef class LinearMatrix2D(object):
+#     cdef int size
+#     cdef int size_x
+#     cdef int size_y
+#     cdef double[:] vec_a
+#     cdef double[:] vec_b
+#     cdef double[:] vec_c
+#     cdef double[:] vec_d
+#     cdef double[:] vec_e
+#     cdef double rsor
+#
+#     cdef int isinit
+#     cdef tuple shape

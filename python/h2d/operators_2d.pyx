@@ -5,14 +5,11 @@ import cython
 cimport numpy as np
 cimport cython
 from cython.parallel import prange, parallel
-import matrix
-cimport matrix
 
-
+from h2d.matrix2D cimport LinearMatrix2D
 
 DTYPE = np.double
 ctypedef np.double_t DTYPE_t
-
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -147,9 +144,9 @@ def eule(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def euli(matrix.linearmatrix2D matA, \
-    np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] pp1, \
-    np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] Field_p, **kwargs):
+def euli(LinearMatrix2D matA, \
+         np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] pp1, \
+         np.ndarray[DTYPE_t, ndim=2, negative_indices=False, mode='c'] Field_p, **kwargs):
     cdef int m = Field_p.shape[0]-1
     cdef int n = Field_p.shape[1]-1
     cdef int idx_x, idx_y

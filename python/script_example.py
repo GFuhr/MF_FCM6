@@ -22,6 +22,7 @@ pyximport.install(setup_args = {'include_dirs': [np.get_include(), os.path.abspa
 from advdiff import  advdiff
 from h2d import h2d
 from h2d import h2d_spectral
+from ns2d import ns2d
 
 try:
     os.chdir('./run')
@@ -32,6 +33,8 @@ except FileNotFoundError:
 if __name__=='__main__':
     data1d = advdiff.simulate()
     video_1 = animated_plot_1d(data1d)
-    data2d = h2d_spectral.simulate()
+    data2d = h2d.simulate()
     video_2 = animated_plot_2d(data2d)
+    data2d = h2d_spectral.simulate()
+    video_3 = animated_plot_2d(data2d)
     plt.show()

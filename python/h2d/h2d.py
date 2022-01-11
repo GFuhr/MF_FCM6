@@ -17,15 +17,15 @@ except ModuleNotFoundError:
     from utils.timer import Timer
     from utils.plotting import figformat, animated_plot_2d
 
-from parameters import load_params, initfield_2D
+from h2d.parameters import load_params, initfield_2D
 from utils.file import get_run_number, save_outputs
 pyximport.install(setup_args={"include_dirs": np.get_include()})
 
 if int(sys.version[0]) < 3:
     sys.exit("This script shouldn't be run by python 2 ")
 
-import operators_2d as operators
-from matrix import linearmatrix2D
+import h2d.operators_2d as operators
+from h2d.matrix2D import LinearMatrix2D
 
 # use for figure format for the full script
 figformat().apply()
@@ -78,7 +78,7 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
         print("diffusion in x direction: {0}".format(C * dt / dx ** 2))
         print("diffusion in y direction: {0}".format(C * dt / dy ** 2))
 
-    mat2D = linearmatrix2D(*shape)
+    mat2D = LinearMatrix2D(*shape)
     mat2D.init(-C * dt, dx, dy)
 
     # main loop
@@ -104,7 +104,7 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
             elif global_params["scheme"] == "RK4":
                 operators.RK4(k1, k2, k3, k4, y1, y2, y3, Field_p, **global_params)
             elif global_params["scheme"] == "CN":
-                # operators.CranckN(Mat, k1, Field_p, **global_params)
+                # operators.CranckN(Mat, k1, Field_w, **global_params)
                 raise ValueError("CN scheme not implemented in 2D")
             else:
                 raise ValueError("scheme not specified")

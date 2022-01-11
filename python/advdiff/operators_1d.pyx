@@ -8,8 +8,8 @@ from cython.parallel import prange, parallel
 import os
 import pyximport
 pyximport.install(setup_args={"include_dirs": [np.get_include(), os.path.abspath(__file__)]})
-#import matrix
-from matrix cimport linearmatrix
+
+from advdiff.matrix cimport linearmatrix
 
 import os
 
@@ -97,8 +97,8 @@ def eule(
     np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] Field_p, **kwargs):
     """
         compute explicit euler time step
-        Field_p = Field_p + dt* (-V d/dx + C d2/dx2)
-        params Field_p :
+        Field_w = Field_w + dt* (-V d/dx + C d2/dx2)
+        params Field_w :
         params rhs : temporary array to compute RHS of equation
         params kwargs : physical parameters (C, V, dx, dt)
     """
