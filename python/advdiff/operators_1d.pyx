@@ -9,7 +9,7 @@ import os
 import pyximport
 pyximport.install(setup_args={"include_dirs": [np.get_include(), os.path.abspath(__file__)]})
 
-from advdiff.matrix cimport linearmatrix
+from matrix cimport linearmatrix
 
 import os
 
