@@ -17,7 +17,7 @@ except ModuleNotFoundError:
     from utils.timer import Timer
     from utils.plotting import figformat, animated_plot_2d
 
-from h2d.parameters import load_params, initfield_2D
+from parameters import load_params, initfield_2D
 from utils.file import get_run_number, save_outputs
 pyximport.install(setup_args={"include_dirs": np.get_include()})
 

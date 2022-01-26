@@ -6,7 +6,7 @@ cimport numpy as np
 cimport cython
 from cython.parallel import prange, parallel
 
-from h2d.matrix2D cimport LinearMatrix2D
+from matrix2D cimport LinearMatrix2D
 
 DTYPE = np.double
 ctypedef np.double_t DTYPE_t
