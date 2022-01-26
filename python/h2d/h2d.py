@@ -24,8 +24,8 @@ pyximport.install(setup_args={"include_dirs": np.get_include()})
 if int(sys.version[0]) < 3:
     sys.exit("This script shouldn't be run by python 2 ")
 
-import h2d.operators_2d as operators
-from h2d.matrix2D import LinearMatrix2D
+import operators_2d as operators
+from matrix2D import LinearMatrix2D
 
 # use for figure format for the full script
 figformat().apply()
