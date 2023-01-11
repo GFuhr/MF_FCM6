@@ -8,12 +8,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-
 try:
     from utils.timer import Timer
     from utils.plotting import figformat, animated_plot_2d
 except ModuleNotFoundError:
-    sys.path.append(os.path.normpath(os.path.join(os.path.realpath(__file__), "../..")))
+    sys.path.append(os.path.normpath(
+        os.path.join(os.path.realpath(__file__), "../..")
+        ))
     from utils.timer import Timer
     from utils.plotting import figformat, animated_plot_2d
 
@@ -51,6 +52,7 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
     Toutput = global_params["Toutput"]
     C = global_params["C"]
     V = global_params["V"]
+    current_scheme = global_params["scheme"].strip().lower()
 
     shape = (Ny, Nx)
     rhs = np.zeros(shape)
@@ -64,7 +66,8 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
     y3 = np.zeros(shape)
 
     # init fields and constants
-    Y, X = np.meshgrid(dx * np.linspace(0, Nx, num=Nx), dy * np.linspace(0, Ny, num=Ny))
+    Y, X = np.meshgrid(dx * np.linspace(0, Nx, num=Nx),
+                       dy * np.linspace(0, Ny, num=Ny))
 
     if init is None:
         Field_p = initfield_2D(X, Y)
@@ -95,15 +98,23 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
     with Timer() as tf:
         while t < Tmax:
 
-            if global_params["scheme"] == "eule":
-                operators.eule(rhs, Field_p, **global_params)
-            elif global_params["scheme"] == "euli":
-                operators.euli(mat2D, rhs, Field_p, **global_params)
-            elif global_params["scheme"] == "RK2":
-                operators.RK2(k1, k2, y1, Field_p, **global_params)
-            elif global_params["scheme"] == "RK4":
-                operators.RK4(k1, k2, k3, k4, y1, y2, y3, Field_p, **global_params)
-            elif global_params["scheme"] == "CN":
+            if current_scheme == "eule":
+                operators.eule(rhs,
+                               Field_p,
+                               **global_params)
+            elif current_scheme == "euli":
+                operators.euli(mat2D, rhs,
+                               Field_p,
+                               **global_params)
+            elif current_scheme == "rk2":
+                operators.RK2(k1, k2, y1,
+                              Field_p,
+                              **global_params)
+            elif current_scheme == "rk4":
+                operators.RK4(k1, k2, k3, k4,
+                              y1, y2, y3,
+                              Field_p, **global_params)
+            elif current_scheme == "cn":
                 # operators.CranckN(Mat, k1, Field_w, **global_params)
                 raise ValueError("CN scheme not implemented in 2D")
             else:
@@ -113,7 +124,8 @@ def simulate(verbose=False, save_files=False, init=None,  **kwargs):
                 if verbose:
                     print('processing.... {0}%'.format(int(100.*t/Tmax)))
                 if save_files:
-                    save_outputs(Field_p, run_number, as_text=True, prefix='h2d_')
+                    save_outputs(Field_p, run_number,
+                                 as_text=True, prefix='h2d_')
                 tlast += Toutput
                 Frames.append(np.array(Field_p))
             t += dt
