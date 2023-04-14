@@ -2,10 +2,9 @@ from types import ModuleType
 from numpy import pi
 import numpy as np
 
-
 # list of parameters used in both advdiff et H2D.
 # each variable written in this file will be transmitted in the main function in the dictionnary global_params
-# other variables (but not functions) can e inserted and will be added automatically
+# other variables (but not functions) can be added and will be inserted automatically in the dictionnary global_params
 
 # time step
 dt = .01
@@ -26,20 +25,19 @@ Ny = 128
 Nm = 32
 
 # wave number in Y direction
-ky = 2*pi/(Ny*dy)
-#ky = .1
+ky = 2 * pi / (Ny * dy)
 
 # end time
-Tmax = 10000*dt
+Tmax = 10000 * dt
 
 # output time
-Toutput = 10*dt
+Toutput = 10 * dt
 
 # diffusion coefficient
 C = 1.8
 
 # advection coefficient
-V = 0.
+V = -.5
 
 # time scheme
 # can be
@@ -50,20 +48,33 @@ V = 0.
 # CN for Cranck-Nicholson
 scheme = 'RK4'
 
-	#############
+# first order derivatives
+# fwd for forward  (u[i+1]-u[i])/dx
+# bwd for backward [default](u[i]-u[i-1])/dx
+# cent for centered (u[i+1]-u[i-1])/(2dx)
+derivative = "bwd"
+
+# boundary condition
+# dir for Dirichlet u[0] = 0
+# neu for Von Neumann du/dx[0] = 0
+# per for periodic u[0] = u[Lx]
+boundaries = "neu"
+
+
+#############
 # functions #
 #############
 
 
-def initfield_1D(x: np.array):
+def initfield_1d(x: np.array):
     """
     generate initial profile for advdiff simulations,
     :param x: meshgrid for X values
     :return: 1D field
     """
-    u0 = np.zeros(x.shape)
+
     _dx = x[1] - x[0]
-    u0 = np.sin(np.pi*x/x.max())
+    u0 = np.sin(np.pi * x / x.max())
 
     # exemple for gate
     # U0[:] = 1
@@ -72,29 +83,28 @@ def initfield_1D(x: np.array):
     return u0
 
 
-def initfield_2D(x: np.array, y: np.array):
+def initfield_2d(x: np.array, y: np.array) -> np.array:
     """
     generate initial profile for H2D simulations,
     :param x: meshgrid for X values
     :param y: meshgrid for Y values
     :return: 2D field
     """
-    u0 = np.zeros(x.shape)
     _dx = x[1] - x[0]
     _dy = y[1] - y[0]
-    u0 = np.sin(x/x.max()+y/y.max())
+    u0 = np.sin(x / x.max() + y / y.max())
 
     # exemple for gate
     u0[:, :] = 1
-    u0[0:u0.shape[0]//4, :] = 0
-    u0[3*u0.shape[0]//4:-1, :] = 0
-    u0[:, 0:u0.shape[1]//4] = 0
-    u0[:, 3*u0.shape[1]//4:-1] = 0
+    u0[0:u0.shape[0] // 4, :] = 0
+    u0[3 * u0.shape[0] // 4:-1, :] = 0
+    u0[:, 0:u0.shape[1] // 4] = 0
+    u0[:, 3 * u0.shape[1] // 4:-1] = 0
     return u0
 
 
 # don't modify this function
-def load_params(**kwargs):
+def load_params(**kwargs) -> dict:
     """
     convert all global variable of this script as a dict with entries :
     variable_names_as_string : variable_value
@@ -114,9 +124,15 @@ def load_params(**kwargs):
     params.update(kwargs)
     if params.get('scheme') is None:
         params['scheme'] = 'eule'
+    if params.get('derivative') is None:
+        params['derivative'] = 'bwd'
+
+    if params.get("boundaries") is None:
+        params['boundaries'] = 'dir'
     params['scheme'] = params['scheme'].strip()
+    params['boundaries'] = params['boundaries'].strip()
     return params
 
 
 if __name__ == '__main__':
-    pass
+    raise RuntimeError("this module is not supposed to be run directly")

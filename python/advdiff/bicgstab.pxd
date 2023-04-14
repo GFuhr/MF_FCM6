@@ -1,0 +1,13 @@
+cdef class MatrixSolver(object):
+    cdef Py_ssize_t size
+    cdef double[::1] dummy
+    cdef double[::1]  r_i
+    cdef double[::1]  s_i
+    cdef double[::1]  v_i
+    cdef double[::1]  p_i
+    cdef double[::1]  t_i
+    cdef double[::1]  r_hat_0
+    cdef double[:,::1]  operator
+    cdef bint isinit
+    cdef double tol
+    cdef int iter

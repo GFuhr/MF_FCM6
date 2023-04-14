@@ -59,7 +59,14 @@ class figformat(object):
 def plot_profile(frames, idx, save=False):
     figformat().apply()
     plt.figure(figsize=(10, 10))
-    plt.plot(frames[idx])
+    if isinstance(idx, (list, tuple)):
+        for i in idx:
+            plt.plot(frames[idx])
+    elif isinstance(idx, slice):
+        for f in frames[idx]:
+            plt.plot(x)
+    else:
+        plt.plot(frames[idx])
     plt.xlabel("x")
     plt.ylabel("u(x)")
     plt.grid(True)
@@ -150,7 +157,7 @@ def plot_results(output, save=False, filename=None):
 
         this function need ffmpeg to work. The best way to install it 
         on windows is through conda :
-        conda -c conda-forge install ffmpeg
+        conda install -c conda-forge ffmpeg
     """
 
     dims = len(output[0].shape)

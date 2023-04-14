@@ -43,11 +43,7 @@ cdef class linearmatrix(object):
     def initInvMat1D(self):
         """
         initialisation des donnees pour l'inversion d'une matrice tridiagonale
-        :param a: diagonale inferieure
-        :param b: diagonale principale
-        :param c: diagonale superieure
-        :param pGam:
-        :param pBet:
+
         :return: None
         """
         cdef int k=0
@@ -61,15 +57,12 @@ cdef class linearmatrix(object):
             self.tridiag_bet[k] = 1./self.tridiag_bet[k]
 
     # routine d'inversion d'une matrice tridiagonale
-    def solve(self, np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] rhs,
-                 np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] inv):
+    def solve(self, const double[::1] rhs,
+                 double[::1] inv):
         """
         routine d'inversion d'une matrice tridiagonale : A * inv = rhs
         :param rhs: vector
         :param inv: vector
-        :param a:
-        :param pGam:
-        :param pBet:
         :return: No return
         """
         cdef long iSizeX = rhs.shape[0]
@@ -82,25 +75,25 @@ cdef class linearmatrix(object):
             inv[k] -= self.tridiag_gam[k+1]*inv[k+1]
 
 
-    def add_diffusion(self, double C, double dx):
+    def add_diffusion(self, const double cdx):
         if  self.isinit is False:
             self.init_tridiag()
         for k in range(0, self.size-1):
-            self.tridiag_b[k] += -2.*C/dx**2
-            self.tridiag_a[k] += C/dx**2
-            self.tridiag_c[k] += C/dx**2
-        self.tridiag_b[self.size-1] += -2.*C/dx**2
+            self.tridiag_b[k] += -2.*cdx
+            self.tridiag_a[k] += cdx
+            self.tridiag_c[k] += cdx
+        self.tridiag_b[self.size-1] += -2.*cdx
 
-    def add_advection(self, double V, double dx):
+    def add_advection(self, const double[::1] vdx):
         if self.isinit is False:
             self.init_tridiag()
         for k in range(0, self.size-1):
-            self.tridiag_b[k] += -V/dx
-            self.tridiag_a[k] += 0
-            self.tridiag_c[k] += V/dx
-        self.tridiag_b[self.size-1] += -V/dx
+            self.tridiag_b[k] -= vdx[1]
+            self.tridiag_a[k] -= vdx[0]
+            self.tridiag_c[k] -= vdx[2]
+        self.tridiag_b[self.size-1] -= vdx[1]
 
-    def add_diag_constant(self, double C):
+    def add_diag_constant(self, const double C):
         for k in range(0, self.size):
             self.tridiag_b[k] += C
 
@@ -276,11 +269,11 @@ def invMat1D(np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] rhs,
         inv[k] -= pGam[k+1]*inv[k+1]
 
 
-def initInvMat1D(np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] a,
-                 np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] b,
-                 np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] c,
-                 np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] pGam,
-                 np.ndarray[DTYPE_t, ndim=1, negative_indices=False, mode='c'] pBet):
+cpdef void initInvMat1D(const double[::1] a,
+                 const double[::1] b,
+                 const double[::1] c,
+                 double[::1] pGam,
+                 double[::1] pBet):
     """
     initialisation des donnees pour l'inversion d'une matrice tridiagonale
     :param a: diagonale inferieure
