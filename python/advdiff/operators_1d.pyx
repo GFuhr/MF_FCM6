@@ -306,8 +306,8 @@ cpdef void RK4(
     op_axpby(k2, 1./3., k3, 1./3.)
     # 1/6(k1+k4)->k4
     op_axpby(k1, 1. / 6., k4, 1. / 6.)
-    # k1+k4->k4
-    op_axpby(k1, 1. , k4, 1.)
+    # k3+k4->k4
+    op_axpby(k3, 1. , k4, 1.)
     # k4+field_p ->field_p
     op_axpby(k4, 1.  , Field_p, 1.)
     # for idx_x in range(start, m):

@@ -19,15 +19,16 @@ if int(sys.version[0]) < 3:
     sys.exit("This script should not be run using python 2 ")
 pyximport.install(setup_args={'include_dirs': [np.get_include(), './advdiff']})
 
-# os.chdir('./advdiff')
+
 print(os.getcwd())
-import matrix
+
 import advdiff
 
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
-    data1d = advdiff.simulate()
+    tout, data1d, _ = advdiff.simulate()
     anim = animated_plot_1d(data1d)
+    plt.plot(data1d[-1])
     plt.show()
