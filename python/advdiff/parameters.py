@@ -10,13 +10,13 @@ import numpy as np
 dt = .01
 
 # x step
-dx = .4
+dx = .2
 
 # y step (used only for H2D simulations)
 dy = .4
 
 # Points in X direction
-Nx = 128
+Nx = 256
 
 # Points in Y direction
 Ny = 128
@@ -34,10 +34,10 @@ Tmax = 10000 * dt
 Toutput = 10 * dt
 
 # diffusion coefficient
-C = 1.8
+C = 0.
 
 # advection coefficient
-V = -.5
+V = -0.045
 
 # time scheme
 # can be

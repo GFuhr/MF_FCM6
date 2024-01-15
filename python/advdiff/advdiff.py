@@ -23,11 +23,9 @@ from utils.plotting import figformat, animated_plot_1d
 from utils.file import get_run_number, save_outputs
 
 try:
-    import matrix
     import operators_1d as operators
     from bicgstab import MatrixSolver
 except ModuleNotFoundError:
-    import advdiff.matrix
     import advdiff.operators_1d as operators
     from advdiff.bicgstab import MatrixSolver
 

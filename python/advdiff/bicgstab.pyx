@@ -11,6 +11,7 @@ cimport numpy as np
 from cython.parallel import prange, parallel
 from libc.math cimport fabs
 
+
 @cython.boundscheck(False) # compiler directive
 @cython.wraparound(False) # compiler directive
 @cython.initializedcheck(False)
